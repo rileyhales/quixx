@@ -9,10 +9,10 @@ class ScoreCard extends React.Component {
     render() {
         return (
             <div key={"scorecard"} className="score-card">
-                <ScoreRow order="ascending" color="red" />
-                <ScoreRow order="ascending" color="yellow" />
-                <ScoreRow order="descending" color="green" />
                 <ScoreRow order="descending" color="blue" />
+                <ScoreRow order="descending" color="green" />
+                <ScoreRow order="ascending" color="yellow" />
+                <ScoreRow order="ascending" color="red" />
             </div>
         )
     }
