@@ -19,6 +19,15 @@ body {
     top: 0;
     height: 10%;
     border-bottom: solid 1px black;
+    padding: 0 1em;
+}
+.nav-title {
+    color: white;
+    vertical-align: middle;
+}
+.nav-button {
+    color: white;
+    vertical-align: middle;
 }
 .score-card {
     position: absolute;
@@ -31,7 +40,6 @@ body {
     margin: auto;
     align-content: center;
     text-align: center;
-    border-top: solid 1px black;
 }
 .score-col {
     overflow: scroll;
@@ -40,14 +48,21 @@ body {
 }
 .score-btn {
     font-weight: bold;
-    font-size: large;
+    font-size: x-large;
     border: solid 1px black;
     opacity: 80%;
     text-align: center;
     background-color: lightgray;
     text-shadow: 2px 2px 4px white;
-    text-outline: 1px black;
     margin: auto;
+}
+.score-btn > img {
+    height: 2em;
+    font-size: medium;
+}
+.score-btn-arrow {
+    background-color: rgba(0,0,0,0);
+    border: none;
 }
 .score-totals {
     width: 100%;
@@ -95,12 +110,16 @@ body {
         max-width: 25%;
         height: 100%;
         padding: 1em 0;
+        padding-bottom: 3%;
     }
     .score-btn {
         height: 10vw;
         width: 10vw;
         display: block;
         padding: 0;
+    }
+    .score-btn-arrow {
+        transform: rotate(90deg);
     }
 }
 /* Wide Screens */
@@ -115,6 +134,7 @@ body {
         flex: 1 1 50px;
         min-height: 20%;
         overflow-x: scroll;
+        padding-right: 3%;
     }
     .score-btn {
         height: 10vh;

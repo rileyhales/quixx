@@ -20,6 +20,18 @@
     {
       "src": "lock-fill.svg",
       "type": "image/svg"
+    },
+    {
+      "src": "caret-right-fill.svg",
+      "type": "image/svg"
+    },
+    {
+      "src": "arrow-repeat.svg",
+      "type": "image/svg"
+    }
+    {
+      "src": "question-circle.svg",
+      "type": "image/svg"
     }
   ],
   "start_url": ".",

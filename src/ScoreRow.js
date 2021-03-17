@@ -8,14 +8,13 @@ class ScoreRow extends React.Component {
     }
 
     render() {
-        let scorebuttons = []
-        for (let i = 2; i <= 12; i++) {
-            scorebuttons.push(<ScoreButton key={`${this.props.color}${i}`} display={i} color={this.props.color} />)
-        }
+        const sums = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        let scorebuttons = sums.map(sum => <ScoreButton key={`${this.props.color}${sum}`} display={sum} color={this.props.color} />);
         if (this.props.order === "descending") {
-            scorebuttons = scorebuttons.reverse();
+            scorebuttons.reverse();
         }
-        scorebuttons.push(<ScoreButton key={`${this.props.color}lock`} display={"lock"} color={this.props.color} />)
+        scorebuttons = [<ScoreButton key={`${this.props.color}arrow`} display="arrow" color={this.props.color} />, ].concat(scorebuttons)
+        scorebuttons = scorebuttons.concat([<ScoreButton key={`${this.props.color}lock`} display="lock" color={this.props.color} />, ])
 
         return (
             <div key={`score-row-${this.props.color}`} className={`score-col bg-quixx-${this.props.color}`}>
