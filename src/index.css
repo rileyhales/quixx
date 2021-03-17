@@ -41,7 +41,7 @@ body {
     align-content: center;
     text-align: center;
 }
-.score-col {
+.score-group {
     overflow: scroll;
     margin: auto auto;
     border: solid 1px black;
@@ -56,9 +56,9 @@ body {
     text-shadow: 2px 2px 4px white;
     margin: auto;
 }
-.score-btn > img {
-    height: 2em;
+.score-btn-arrow > img {
     font-size: medium;
+    height: 2em;
 }
 .score-btn-arrow {
     background-color: rgba(0,0,0,0);
@@ -105,12 +105,11 @@ body {
 
 /* Tall screens */
 @media (max-aspect-ratio: 1/1) {
-    .score-col {
+    .score-group {
         flex: 1 1 50px;
         max-width: 25%;
         height: 100%;
-        padding: 1em 0;
-        padding-bottom: 3%;
+        padding-bottom: 2%;
     }
     .score-btn {
         height: 10vw;
@@ -127,7 +126,7 @@ body {
     .score-card {
         flex-direction: column-reverse;
     }
-    .score-col {
+    .score-group {
         display: flex;
         flex-direction: row;
         width: 100%;
@@ -137,8 +136,8 @@ body {
         padding-right: 3%;
     }
     .score-btn {
-        height: 10vh;
-        width: 10vh;
+        height: 9vh;
+        width: 9vh;
         padding: 0;
     }
 }

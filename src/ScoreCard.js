@@ -1,5 +1,5 @@
 import React from "react"
-import ScoreRow from "./ScoreRow";
+import ScoreGroup from "./ScoreGroup";
 
 class ScoreCard extends React.Component {
     constructor(props) {
@@ -9,10 +9,10 @@ class ScoreCard extends React.Component {
     render() {
         return (
             <div key={"scorecard"} className="score-card">
-                <ScoreRow order="descending" color="blue" />
-                <ScoreRow order="descending" color="green" />
-                <ScoreRow order="ascending" color="yellow" />
-                <ScoreRow order="ascending" color="red" />
+                <ScoreGroup order="descending" color="blue" />
+                <ScoreGroup order="descending" color="green" />
+                <ScoreGroup order="ascending" color="yellow" />
+                <ScoreGroup order="ascending" color="red" />
             </div>
         )
     }
