@@ -56,6 +56,14 @@ body {
     text-shadow: 2px 2px 4px white;
     margin: auto;
 }
+.score-btn-scored {
+    background-color: lime;
+    opacity: 100%;
+}
+.score-btn-skipped {
+    background-color: darkred;
+    opacity: 1;
+}
 .score-btn-arrow > img {
     font-size: medium;
     height: 2em;
@@ -63,6 +71,7 @@ body {
 .score-btn-arrow {
     background-color: rgba(0,0,0,0);
     border: none;
+    cursor: default;
 }
 .score-totals {
     width: 100%;
@@ -70,37 +79,6 @@ body {
     bottom: 0;
     height: 10%;
     background-color: lightgray;
-}
-
-.bg-quixx-orange {
-    background-color: orange;
-}
-.txt-quixx-orange {
-    color: orange;
-}
-.bg-quixx-red {
-    background-color: red;
-}
-.txt-quixx-red {
-    color: red;
-}
-.bg-quixx-yellow {
-    background-color: #cdb42f;
-}
-.txt-quixx-yellow {
-    color: #cdb42f;
-}
-.bg-quixx-green {
-    background-color: green;
-}
-.txt-quixx-green {
-    color: green;
-}
-.bg-quixx-blue {
-    background-color: #2525ff;
-}
-.txt-quixx-blue {
-    color: #2525ff;
 }
 
 /* Tall screens */
