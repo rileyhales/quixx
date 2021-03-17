@@ -18,23 +18,29 @@ class ScoreCard extends React.Component {
                 yellow: 0,
                 green: 0,
                 blue: 0
-            }
+            },
+            ascendorder: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            descendorder: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
         }
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
     }
 
     handleScoreButtonClick = function (event) {
         // disable clicked button
+        let buttonid = event.target.id.split("-")
         event.target.disabled = true
         event.target.className += (" score-btn-scored")
 
-        // score the clicked button
-        console.log(event)
-        console.log(event.target.id)
-        let buttonid = event.target.id.split("-")
-
-
-        // todo disable the buttons before the one you clicked on
+        // disable the buttons before the clicked one
+        if (buttonid[0] === "red" || buttonid[0] === "yellow") {
+            for (let i = 0; i <= this.state.ascendorder.indexOf(Number(buttonid[1])); i++) {
+                document.getElementById(`${buttonid[0]}-${this.state.ascendorder[i]}`).disabled = true
+            }
+        } else if  (buttonid[0] === "green" || buttonid[0] === "blue") {
+            for (let i = 0; i <= this.state.descendorder.indexOf(Number(buttonid[1])); i++) {
+                document.getElementById(`${buttonid[0]}-${this.state.descendorder[i]}`).disabled = true
+            }
+        }
 
         // set the state with the changes made
         this.setState(previousState => {
