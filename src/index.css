@@ -18,12 +18,13 @@ body {
     position: absolute;
     top: 0;
     height: 10%;
-    border-bottom: solid 1px black;
     padding: 0 1em;
+    display: table;
 }
 .nav-title {
     color: white;
     vertical-align: middle;
+    display: table-cell;
 }
 .nav-button {
     color: white;
@@ -77,8 +78,17 @@ body {
     width: 100%;
     position: absolute;
     bottom: 0;
-    height: 10%;
+    top: 90%;
     background-color: lightgray;
+    display: flex;
+    text-align: center;
+    padding: 0 5%;
+}
+.score-total-btn {
+    opacity: 40%;
+}
+.score-totals > * {
+    margin: auto;
 }
 
 /* Tall screens */
@@ -102,7 +112,7 @@ body {
 /* Wide Screens */
 @media (min-aspect-ratio: 1/1) {
     .score-card {
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
     .score-group {
         display: flex;
