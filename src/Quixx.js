@@ -96,6 +96,9 @@ class Quixx extends React.Component {
     }
     handleRestartButtonClick = function () {
         this.setState(currentState => {
+            if (currentState.undoState === null) {
+                return currentState
+            }
             let revertState = currentState.undoState
             while (revertState.undoState !== null) {
                 revertState = revertState.undoState
