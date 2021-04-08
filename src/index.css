@@ -58,19 +58,19 @@ body {
     margin: auto;
 }
 .score-btn-scored {
-    background-color: lime;
-    opacity: 100%;
-}
-.score-btn-skipped {
-    background-color: darkred;
+    background-color: lime !important;
     opacity: 1;
+}
+.score-btn:disabled {
+    background-color: darkred;
+    opacity: .75;
 }
 .score-btn-arrow > img {
     font-size: medium;
     height: 2em;
 }
 .score-btn-arrow {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0) !important;
     border: none;
     cursor: default;
 }
@@ -93,6 +93,9 @@ body {
 
 /* Tall screens */
 @media (max-aspect-ratio: 1/1) {
+    .score-card {
+        flex-direction: row-reverse;
+    }
     .score-group {
         flex: 1 1 50px;
         max-width: 25%;

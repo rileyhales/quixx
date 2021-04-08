@@ -4,23 +4,37 @@ import NavBar from "./NavBar";
 import ScoreTotals from "./ScoreTotals";
 import ScoreGroup from "./ScoreGroup";
 
-const numberOfButtons = 12
 
 class Quixx extends React.Component {
     constructor(props) {
         super(props)
+        const numberOfButtons = 12
+        const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
+        const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
         this.state = {
-            checkedButtons: {
-                red: Array(numberOfButtons).fill(false),
-                yellow: Array(numberOfButtons).fill(false),
-                green: Array(numberOfButtons).fill(false),
-                blue: Array(numberOfButtons).fill(false),
+            red: {
+                color: "red",
+                isScored: Array(numberOfButtons).fill(false),
+                isClickable: Array(numberOfButtons).fill(true),
+                order: ascendOrder
             },
-            checks: {
-                red: 0,
-                yellow: 0,
-                green: 0,
-                blue: 0
+            yellow: {
+                color: "yellow",
+                isScored: Array(numberOfButtons).fill(false),
+                isClickable: Array(numberOfButtons).fill(true),
+                order: ascendOrder
+            },
+            green: {
+                color: "green",
+                isScored: Array(numberOfButtons).fill(false),
+                isClickable: Array(numberOfButtons).fill(true),
+                order: descendOrder
+            },
+            blue: {
+                color: "blue",
+                isScored: Array(numberOfButtons).fill(false),
+                isClickable: Array(numberOfButtons).fill(true),
+                order: descendOrder
             },
             scores: {
                 red: 0,
@@ -29,40 +43,46 @@ class Quixx extends React.Component {
                 blue: 0,
                 total: 0,
             },
-            ascend: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            descend: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
         }
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
     }
 
-    handleScoreButtonClick = function (event) {
-        // disable clicked button
-        let buttonid = event.target.id.split("-")
-        event.target.disabled = true
-        event.target.className += (" score-btn-scored")
-
-        // disable the buttons before the clicked one
-        if (buttonid[0] === "red" || buttonid[0] === "yellow") {
-            for (let i = 0; i <= this.state.ascend.indexOf(Number(buttonid[1])); i++) {
-                document.getElementById(`${buttonid[0]}-${this.state.ascend[i]}`).disabled = true
-            }
-        } else if (buttonid[0] === "green" || buttonid[0] === "blue") {
-            for (let i = 0; i <= this.state.descend.indexOf(Number(buttonid[1])); i++) {
-                document.getElementById(`${buttonid[0]}-${this.state.descend[i]}`).disabled = true
-            }
+    calculateAllScores = function (newState) {
+        const scoreRed = this.computeScore(newState.red.isScored.filter(Boolean).length)
+        const scoreYellow = this.computeScore(newState.yellow.isScored.filter(Boolean).length)
+        const scoreGreen = this.computeScore(newState.green.isScored.filter(Boolean).length)
+        const scoreBlue = this.computeScore(newState.blue.isScored.filter(Boolean).length)
+        return {
+            red: scoreRed,
+            yellow: scoreYellow,
+            green: scoreGreen,
+            blue: scoreBlue,
+            total: scoreRed + scoreYellow + scoreGreen + scoreBlue
         }
+    }
 
-        // set the state with the changes made
-        this.setState(previousState => {
-            let checks = previousState.checks
-            checks[buttonid[0]] += 1
-            let scores = previousState.scores
-            scores[buttonid[0]] += checks[buttonid[0]]
-            scores.total = scores.red + scores.yellow + scores.green + scores.blue
-            return {
-                "checks": checks,
-                "score": scores
-            }
+    computeScore = function (count) {
+        // modified formula for sum between 2 numbers for lower number always being 1
+        return count * (count + 1) / 2
+    }
+
+    handleScoreButtonClick = function (event, targetColor, targetNumber) {
+        this.setState(currentState => {
+            // figure out which index in the scoring/clickable arrays we're on
+            const targetIndex = currentState[targetColor].order.indexOf(targetNumber)
+
+            // toggle the scored status of the button
+            currentState[targetColor].isScored[targetIndex] = !(currentState[targetColor].isScored[targetIndex])
+
+            // figure out what buttons should be clickable
+            const indexOfHighestScoredBox = currentState[targetColor].isScored.lastIndexOf(true)
+            currentState[targetColor].isClickable = currentState[targetColor].isClickable.map((element, index) => {
+                return !(index < indexOfHighestScoredBox)
+            })
+
+            // calculate the new scores
+            currentState.scores = this.calculateAllScores(currentState)
+            return currentState
         })
     }
 
@@ -71,10 +91,10 @@ class Quixx extends React.Component {
         return (<div>
                 <NavBar/>
                 <div key={"scorecard"} className="score-card">
-                    <ScoreGroup order={this.state.ascend} color="red" handleScoreButtonClick={this.handleScoreButtonClick}/>
-                    <ScoreGroup order={this.state.ascend} color="yellow" handleScoreButtonClick={this.handleScoreButtonClick}/>
-                    <ScoreGroup order={this.state.descend} color="green" handleScoreButtonClick={this.handleScoreButtonClick}/>
-                    <ScoreGroup order={this.state.descend} color="blue" handleScoreButtonClick={this.handleScoreButtonClick}/>
+                    <ScoreGroup configs={this.state.red} handleScoreButtonClick={this.handleScoreButtonClick}/>
+                    <ScoreGroup configs={this.state.yellow} handleScoreButtonClick={this.handleScoreButtonClick}/>
+                    <ScoreGroup configs={this.state.green} handleScoreButtonClick={this.handleScoreButtonClick}/>
+                    <ScoreGroup configs={this.state.blue} handleScoreButtonClick={this.handleScoreButtonClick}/>
                 </div>
                 <ScoreTotals scores={this.state.scores}/>
             </div>

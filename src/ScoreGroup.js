@@ -1,34 +1,25 @@
 import React from "react";
 
 import ScoreButton from "./ScoreButton";
+import ScoreRowArrow from "./ScoreRowArrow";
 
 const ScoreGroup = function (props) {
-    let scorebuttons = props.order.map(
-        sum => <ScoreButton
-            key={`${props.color}-${sum}`}
-            id={`${props.color}-${sum}`}
-            display={sum}
-            color={props.color}
-            handleScoreButtonClick={props.handleScoreButtonClick}/>
-    );
-    scorebuttons = [<ScoreButton
-        key={`${props.color}-arrow`}
-        id={`${props.color}-arrow`}
-        display="arrow"
-        color={props.color}
-    />,]
-        .concat(scorebuttons)
-        .concat([
-            <ScoreButton
-                key={`${props.color}-lock`}
-                id={`${props.color}-lock`}
-                display="lock"
-                color={props.color}
-                handleScoreButtonClick={props.handleScoreButtonClick}
-            />,
-        ])
+    // add the arrow
+    const scorebuttons = [<ScoreRowArrow key={`${props.configs.color}-arrow`}/>,]
+        // then buttons for each number & the lock icon
+        .concat(
+            props.configs.order.map(
+                (number, index) => <ScoreButton
+                    key={`${props.configs.color}-${number}`}
+                    display={number}
+                    color={props.configs.color}
+                    isClickable={props.configs.isClickable[index]}
+                    isScored={props.configs.isScored[index]}
+                    handleScoreButtonClick={props.handleScoreButtonClick}/>
+            )
+        )
     return (
-        <div key={`score-group-${props.color}`} className={`score-group bg-quixx-${props.color}`}>
+        <div className={`score-group bg-quixx-${props.configs.color}`}>
             {scorebuttons}
         </div>
     )
