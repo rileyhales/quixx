@@ -8,10 +8,14 @@ import ScoreGroup from "./ScoreGroup";
 class Quixx extends React.Component {
     constructor(props) {
         super(props)
+
         const numberOfButtons = 12
         const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
         const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
+
         this.state = {
+            undoState: null,
+            redoState: null,
             red: {
                 color: "red",
                 isScored: Array(numberOfButtons).fill(false),
@@ -44,7 +48,15 @@ class Quixx extends React.Component {
                 total: 0,
             },
         }
+
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
+        this.handleUndoButtonClick = this.handleUndoButtonClick.bind(this)
+        this.handleRedoButtonClick = this.handleRedoButtonClick.bind(this)
+    }
+
+    computeScore = function (count) {
+        // modified formula for sum between 2 numbers for lower number always being 1
+        return count * (count + 1) / 2
     }
 
     calculateAllScores = function (newState) {
@@ -61,13 +73,33 @@ class Quixx extends React.Component {
         }
     }
 
-    computeScore = function (count) {
-        // modified formula for sum between 2 numbers for lower number always being 1
-        return count * (count + 1) / 2
+    handleUndoButtonClick = function () {
+        if (this.state.undoState === null) {
+            return
+        }
+        this.setState(currentState => {
+            // cache a clone of the current state as the state to "redo"
+            currentState.undoState.redoState = JSON.parse(JSON.stringify(currentState))
+            return currentState.undoState
+        })
+    }
+    handleRedoButtonClick = function () {
+        if (this.state.redoState === null) {
+            return
+        }
+        this.setState(currentState => {
+            // cache a clone of the current state as the state to "undo"
+            currentState.redoState.undoState = JSON.parse(JSON.stringify(currentState))
+            return currentState.redoState
+        })
     }
 
     handleScoreButtonClick = function (event, targetColor, targetNumber) {
         this.setState(currentState => {
+            // cache a clone of the current state into possible undo states, no more forward button
+            currentState.undoState = JSON.parse(JSON.stringify(currentState))
+            currentState.redoState = null
+
             // figure out which index in the scoring/clickable arrays we're on
             const targetIndex = currentState[targetColor].order.indexOf(targetNumber)
 
@@ -88,8 +120,9 @@ class Quixx extends React.Component {
 
     render() {
 
-        return (<div>
-                <NavBar/>
+        return (
+            <div>
+                <NavBar canUndo={!(this.state.undoState === null)} canRedo={!(this.state.redoState === null)} handleUndoButtonClick={this.handleUndoButtonClick} handleRedoButtonClick={this.handleRedoButtonClick}/>
                 <div key={"scorecard"} className="score-card">
                     <ScoreGroup configs={this.state.red} handleScoreButtonClick={this.handleScoreButtonClick}/>
                     <ScoreGroup configs={this.state.yellow} handleScoreButtonClick={this.handleScoreButtonClick}/>

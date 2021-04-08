@@ -1,4 +1,5 @@
 import React from 'react';
+import {SVG_LOCK_ICON} from './IconTags'
 
 const ScoreButton = function (props) {
     return (
@@ -6,7 +7,7 @@ const ScoreButton = function (props) {
             className={`btn score-btn txt-quixx-${props.color} ${props.isScored ? 'score-btn-scored' : ""}`}
             onClick={(event) => props.handleScoreButtonClick(event, props.color, props.display)}
             disabled={!props.isClickable}>
-            {props.display === "lock" ? <img alt="Lock group icon" src="lock-fill.svg"></img> : props.display}
+            {props.display === "lock" ? SVG_LOCK_ICON : props.display}
         </button>
     )
 }

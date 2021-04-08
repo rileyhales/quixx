@@ -91,6 +91,16 @@ body {
     margin: auto;
 }
 
+.ttravel-button-group {
+    vertical-align: middle;
+    display: table-cell;
+}
+.ttravel-btn {
+    float: right;
+}
+.ttravel-btn:disabled {}
+
+
 /* Tall screens */
 @media (max-aspect-ratio: 1/1) {
     .score-card {
