@@ -1,7 +1,6 @@
 import React from 'react';
 
 const ScoreButton = function (props) {
-    // console.log(props)
     let className = `btn score-btn txt-quixx-${props.color}`;
     let content;
     if (props.display === "arrow") {

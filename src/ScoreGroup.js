@@ -3,11 +3,7 @@ import React from "react";
 import ScoreButton from "./ScoreButton";
 
 const ScoreGroup = function (props) {
-    let sums = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    if (props.order === "descending") {
-        sums = sums.reverse();
-    }
-    let scorebuttons = sums.map(
+    let scorebuttons = props.order.map(
         sum => <ScoreButton
             key={`${props.color}-${sum}`}
             id={`${props.color}-${sum}`}
