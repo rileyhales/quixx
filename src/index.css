@@ -97,8 +97,14 @@ body {
 }
 .ttravel-btn {
     float: right;
+    height: 100%;
 }
-.ttravel-btn:disabled {}
+.ttravel-btn > img {
+    height: 50%;
+}
+.ttravel-btn:disabled {
+    opacity: .5;
+}
 
 
 /* Tall screens */

@@ -52,6 +52,7 @@ class Quixx extends React.Component {
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
         this.handleUndoButtonClick = this.handleUndoButtonClick.bind(this)
         this.handleRedoButtonClick = this.handleRedoButtonClick.bind(this)
+        this.handleRestartButtonClick = this.handleRestartButtonClick.bind(this)
     }
 
     computeScore = function (count) {
@@ -93,6 +94,16 @@ class Quixx extends React.Component {
             return currentState.redoState
         })
     }
+    handleRestartButtonClick = function () {
+        this.setState(currentState => {
+            let revertState = currentState.undoState
+            while (revertState.undoState !== null) {
+                revertState = revertState.undoState
+            }
+            revertState.redoState = null
+            return revertState
+        })
+    }
 
     handleScoreButtonClick = function (event, targetColor, targetNumber) {
         this.setState(currentState => {
@@ -122,7 +133,12 @@ class Quixx extends React.Component {
 
         return (
             <div>
-                <NavBar canUndo={!(this.state.undoState === null)} canRedo={!(this.state.redoState === null)} handleUndoButtonClick={this.handleUndoButtonClick} handleRedoButtonClick={this.handleRedoButtonClick}/>
+                <NavBar
+                    canUndo={!(this.state.undoState === null)}
+                    canRedo={!(this.state.redoState === null)}
+                    handleUndoButtonClick={this.handleUndoButtonClick}
+                    handleRedoButtonClick={this.handleRedoButtonClick}
+                    handleRestartButtonClick={this.handleRestartButtonClick}/>
                 <div key={"scorecard"} className="score-card">
                     <ScoreGroup configs={this.state.red} handleScoreButtonClick={this.handleScoreButtonClick}/>
                     <ScoreGroup configs={this.state.yellow} handleScoreButtonClick={this.handleScoreButtonClick}/>

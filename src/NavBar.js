@@ -9,7 +9,8 @@ const NavBar = function (props) {
                 canUndo={props.canUndo}
                 canRedo={props.canRedo}
                 handleUndoButtonClick={props.handleUndoButtonClick}
-                handleRedoButtonClick={props.handleRedoButtonClick}/>
+                handleRedoButtonClick={props.handleRedoButtonClick}
+                handleRestartButtonClick={props.handleRestartButtonClick}/>
         </nav>
     )
 }
