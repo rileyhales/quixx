@@ -51,7 +51,7 @@ body {
     font-weight: bold;
     font-size: x-large;
     border: solid 1px black;
-    opacity: 80%;
+    opacity: .8;
     text-align: center;
     background-color: lightgray;
     text-shadow: 2px 2px 4px white;
