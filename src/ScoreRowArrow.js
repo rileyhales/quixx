@@ -1,9 +1,10 @@
 import React from "react";
+import {SVG_CARET_ICON} from "./IconTags"
 
 const ScoreRowArrow = function () {
     return (
         <button className={`btn score-btn score-btn-arrow`} disabled={true}>
-            <img alt="Start direction arrow" src="caret-right-fill.svg"></img>
+            {SVG_CARET_ICON}
         </button>
     )
 }
