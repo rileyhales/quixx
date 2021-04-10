@@ -1,0 +1,27 @@
+.quixx-nav {
+    padding: 0 1em;
+    display: table;
+}
+.nav-title {
+    color: white;
+    vertical-align: middle;
+    display: table-cell;
+}
+.nav-button {
+    color: white;
+    vertical-align: middle;
+}
+.ttravel-button-group {
+    vertical-align: middle;
+    display: table-cell;
+}
+.ttravel-btn {
+    float: right;
+    height: 100%;
+}
+.ttravel-btn > img {
+    height: 50%;
+}
+.ttravel-btn:disabled {
+    opacity: .5;
+}

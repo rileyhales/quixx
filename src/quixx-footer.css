@@ -3,10 +3,6 @@ input[type="checkbox"] {
     transform: scale(2);
 }
 .quixx-footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    top: 90%;
     background-color: lightgray;
     display: flex;
     text-align: center;
