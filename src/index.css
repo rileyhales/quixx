@@ -46,6 +46,7 @@ body {
     overflow: scroll;
     margin: auto auto;
     border: solid 1px black;
+    display: flex;
 }
 .score-btn {
     font-weight: bold;
@@ -74,24 +75,7 @@ body {
     border: none;
     cursor: default;
 }
-.score-totals {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    top: 90%;
-    background-color: lightgray;
-    display: flex;
-    text-align: center;
-}
-.score-total-btn {
-    max-height: 2em;
-    max-width: 2em;
-    font-weight: bold;
-    opacity: .5;
-}
-.score-totals > * {
-    margin: auto;
-}
+
 .ttravel-button-group {
     vertical-align: middle;
     display: table-cell;
@@ -114,6 +98,7 @@ body {
         flex-direction: row-reverse;
     }
     .score-group {
+        flex-direction: column;
         flex: 1 1 50px;
         max-width: 25%;
         height: 100%;
@@ -123,8 +108,8 @@ body {
         height: 9vw;
         width: 9vw;
         display: block;
-        max-height: 2.5em;
-        max-width: 2.5em;
+        max-height: 2em;
+        max-width: 2em;
     }
     .score-btn-arrow {
         transform: rotate(90deg);
@@ -136,7 +121,6 @@ body {
         flex-direction: column;
     }
     .score-group {
-        display: flex;
         flex-direction: row;
         width: 100%;
         flex: 1 1 50px;
@@ -147,10 +131,7 @@ body {
     .score-btn {
         height: 8vh;
         width: 8vh;
+        max-height: 2.5em;
+        max-width: 2.5em;
     }
-}
-
-input[type="checkbox"] {
-    margin: 0 10px;
-    transform: scale(2);
 }

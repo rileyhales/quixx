@@ -1,15 +1,15 @@
 import React from "react";
 
 import NavBar from "./NavBar";
-import ScoreTotals from "./ScoreTotals";
 import ScoreGroup from "./ScoreGroup";
-
+import ScoreFooter from "./ScoreFooter";
 
 class Quixx extends React.Component {
     constructor(props) {
         super(props)
 
         const numberOfButtons = 12
+        const numberOfSkips = 4
         const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
         const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
 
@@ -47,6 +47,7 @@ class Quixx extends React.Component {
                 blue: 0,
                 total: 0,
             },
+            skips: Array(numberOfSkips).fill(false),
         }
 
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
@@ -148,7 +149,7 @@ class Quixx extends React.Component {
                     <ScoreGroup configs={this.state.green} handleScoreButtonClick={this.handleScoreButtonClick}/>
                     <ScoreGroup configs={this.state.blue} handleScoreButtonClick={this.handleScoreButtonClick}/>
                 </div>
-                <ScoreTotals scores={this.state.scores}/>
+                <ScoreFooter scores={this.state.scores} skips={this.state.skips}/>
             </div>
         )
     }
