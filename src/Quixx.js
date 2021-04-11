@@ -1,15 +1,15 @@
 import React from "react";
 
 import NavBar from "./NavBar";
-import ScoreTotals from "./ScoreTotals";
 import ScoreGroup from "./ScoreGroup";
-
+import ScoreFooter from "./ScoreFooter";
 
 class Quixx extends React.Component {
     constructor(props) {
         super(props)
 
         const numberOfButtons = 12
+        const numberOfSkips = 4
         const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
         const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
 
@@ -47,12 +47,14 @@ class Quixx extends React.Component {
                 blue: 0,
                 total: 0,
             },
+            skips: Array(numberOfSkips).fill(false),
         }
 
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
         this.handleUndoButtonClick = this.handleUndoButtonClick.bind(this)
         this.handleRedoButtonClick = this.handleRedoButtonClick.bind(this)
         this.handleRestartButtonClick = this.handleRestartButtonClick.bind(this)
+        this.handleSkipCheck = this.handleSkipCheck.bind(this)
     }
 
     computeScore = function (count) {
@@ -65,12 +67,14 @@ class Quixx extends React.Component {
         const scoreYellow = this.computeScore(newState.yellow.isScored.filter(Boolean).length)
         const scoreGreen = this.computeScore(newState.green.isScored.filter(Boolean).length)
         const scoreBlue = this.computeScore(newState.blue.isScored.filter(Boolean).length)
+        const scoreSkips = newState.skips.filter(Boolean).length * 5
         return {
             red: scoreRed,
             yellow: scoreYellow,
             green: scoreGreen,
             blue: scoreBlue,
-            total: scoreRed + scoreYellow + scoreGreen + scoreBlue
+            skips: scoreSkips,
+            total: scoreRed + scoreYellow + scoreGreen + scoreBlue - scoreSkips
         }
     }
 
@@ -106,6 +110,15 @@ class Quixx extends React.Component {
             revertState.redoState = null
             return revertState
         })
+    }
+
+    handleSkipCheck = function (event, index) {
+        this.setState(currentState => {
+            currentState.skips[index] = !currentState.skips[index]
+            currentState.scores = this.calculateAllScores(currentState)
+            return currentState
+        })
+
     }
 
     handleScoreButtonClick = function (event, targetColor, targetNumber) {
@@ -148,7 +161,7 @@ class Quixx extends React.Component {
                     <ScoreGroup configs={this.state.green} handleScoreButtonClick={this.handleScoreButtonClick}/>
                     <ScoreGroup configs={this.state.blue} handleScoreButtonClick={this.handleScoreButtonClick}/>
                 </div>
-                <ScoreTotals scores={this.state.scores}/>
+                <ScoreFooter scores={this.state.scores} skips={this.state.skips} handleSkipCheck={this.handleSkipCheck}/>
             </div>
         )
     }

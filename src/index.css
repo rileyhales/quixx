@@ -18,132 +18,18 @@ body {
     position: absolute;
     top: 0;
     height: 10%;
-    padding: 0 1em;
-    display: table;
-}
-.nav-title {
-    color: white;
-    vertical-align: middle;
-    display: table-cell;
-}
-.nav-button {
-    color: white;
-    vertical-align: middle;
 }
 .score-card {
     position: absolute;
     top: 10%;
     bottom: 10%;
-    display: flex;
     height: 80%;
     max-height: 80%;
     width: 100%;
-    margin: auto;
-    align-content: center;
-    text-align: center;
 }
-.score-group {
-    overflow: scroll;
-    margin: auto auto;
-    border: solid 1px black;
-}
-.score-btn {
-    font-weight: bold;
-    font-size: x-large;
-    border: solid 1px black;
-    opacity: .8;
-    text-align: center;
-    background-color: lightgray;
-    margin: auto;
-}
-.score-btn-scored {
-    background-color: lime !important;
-    opacity: 1;
-}
-.score-btn:disabled {
-    background-color: darkred;
-    opacity: .75;
-}
-.score-btn-arrow > img {
-    font-size: medium;
-    height: 2em;
-}
-.score-btn-arrow {
-    background-color: rgba(0,0,0,0) !important;
-    border: none;
-    cursor: default;
-}
-.score-totals {
+.quixx-footer {
     width: 100%;
     position: absolute;
     bottom: 0;
     top: 90%;
-    background-color: lightgray;
-    display: flex;
-    text-align: center;
-    padding: 0 5%;
-}
-.score-total-btn {
-    opacity: 40%;
-}
-.score-totals > * {
-    margin: auto;
-}
-
-.ttravel-button-group {
-    vertical-align: middle;
-    display: table-cell;
-}
-.ttravel-btn {
-    float: right;
-    height: 100%;
-}
-.ttravel-btn > img {
-    height: 50%;
-}
-.ttravel-btn:disabled {
-    opacity: .5;
-}
-
-
-/* Tall screens */
-@media (max-aspect-ratio: 1/1) {
-    .score-card {
-        flex-direction: row-reverse;
-    }
-    .score-group {
-        flex: 1 1 50px;
-        max-width: 25%;
-        height: 100%;
-        padding-bottom: 2%;
-    }
-    .score-btn {
-        height: 10vw;
-        width: 10vw;
-        display: block;
-        padding: 0;
-    }
-    .score-btn-arrow {
-        transform: rotate(90deg);
-    }
-}
-/* Wide Screens */
-@media (min-aspect-ratio: 1/1) {
-    .score-card {
-        flex-direction: column;
-    }
-    .score-group {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        flex: 1 1 50px;
-        min-height: 20%;
-        overflow-x: scroll;
-        padding-right: 3%;
-    }
-    .score-btn {
-        height: 9vh;
-        width: 9vh;
-        padding: 0;
-    }
 }
