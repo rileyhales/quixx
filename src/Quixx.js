@@ -68,14 +68,14 @@ class Quixx extends React.Component {
         const scoreYellow = this.computeScore(newState.yellow.isScored.filter(Boolean).length)
         const scoreGreen = this.computeScore(newState.green.isScored.filter(Boolean).length)
         const scoreBlue = this.computeScore(newState.blue.isScored.filter(Boolean).length)
-        const scoreSkips = newState.skips.filter(Boolean).length * -5
+        const scoreSkips = newState.skips.filter(Boolean).length * 5
         return {
             red: scoreRed,
             yellow: scoreYellow,
             green: scoreGreen,
             blue: scoreBlue,
             skips: scoreSkips,
-            total: scoreRed + scoreYellow + scoreGreen + scoreBlue + scoreSkips
+            total: scoreRed + scoreYellow + scoreGreen + scoreBlue - scoreSkips
         }
     }
 
