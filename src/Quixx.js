@@ -45,6 +45,7 @@ class Quixx extends React.Component {
                 yellow: 0,
                 green: 0,
                 blue: 0,
+                skips: 0,
                 total: 0,
             },
             skips: Array(numberOfSkips).fill(false),
@@ -67,14 +68,14 @@ class Quixx extends React.Component {
         const scoreYellow = this.computeScore(newState.yellow.isScored.filter(Boolean).length)
         const scoreGreen = this.computeScore(newState.green.isScored.filter(Boolean).length)
         const scoreBlue = this.computeScore(newState.blue.isScored.filter(Boolean).length)
-        const scoreSkips = newState.skips.filter(Boolean).length * 5
+        const scoreSkips = newState.skips.filter(Boolean).length * -5
         return {
             red: scoreRed,
             yellow: scoreYellow,
             green: scoreGreen,
             blue: scoreBlue,
             skips: scoreSkips,
-            total: scoreRed + scoreYellow + scoreGreen + scoreBlue - scoreSkips
+            total: scoreRed + scoreYellow + scoreGreen + scoreBlue + scoreSkips
         }
     }
 
@@ -114,6 +115,10 @@ class Quixx extends React.Component {
 
     handleSkipCheck = function (event, index) {
         this.setState(currentState => {
+            // cache a clone of the current state into the undo start queue, remove the redo queue
+            currentState.undoState = JSON.parse(JSON.stringify(currentState))
+            currentState.redoState = null
+
             currentState.skips[index] = !currentState.skips[index]
             currentState.scores = this.calculateAllScores(currentState)
             return currentState
@@ -123,7 +128,7 @@ class Quixx extends React.Component {
 
     handleScoreButtonClick = function (event, targetColor, targetNumber) {
         this.setState(currentState => {
-            // cache a clone of the current state into possible undo states, no more forward button
+            // cache a clone of the current state into the undo start queue, remove the redo queue
             currentState.undoState = JSON.parse(JSON.stringify(currentState))
             currentState.redoState = null
 

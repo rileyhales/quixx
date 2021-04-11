@@ -11,7 +11,7 @@ const ScoreTotals = function (props) {
             <div>+</div>
             <button className="score-total-btn bg-quixx-blue-op">{props.scores.blue}</button>
             <div>-</div>
-            <button className="score-total-btn">{props.scores.blue}</button>
+            <button className="score-total-btn">{props.scores.skips}</button>
             <div>=</div>
             <button className="score-total-btn">{props.scores.total}</button>
         </div>
