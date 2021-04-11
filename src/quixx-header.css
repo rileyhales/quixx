@@ -7,21 +7,17 @@
     vertical-align: middle;
     display: table-cell;
 }
-.nav-button {
-    color: white;
-    vertical-align: middle;
-}
-.ttravel-button-group {
+.nav-button-group {
     vertical-align: middle;
     display: table-cell;
 }
-.ttravel-btn {
+.nav-btn {
     float: right;
     height: 100%;
 }
-.ttravel-btn > img {
+.nav-btn > img {
     height: 50%;
 }
-.ttravel-btn:disabled {
+.nav-btn:disabled {
     opacity: .5;
 }
