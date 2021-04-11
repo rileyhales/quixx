@@ -7,7 +7,7 @@ const ScoreFooter = function (props) {
     return (
         <div className="quixx-footer">
             <ScoreTotals scores={props.scores}/>
-            <ScoreSkips/>
+            <ScoreSkips skips={props.skips} handleSkipCheck={props.handleSkipCheck}/>
         </div>
     )
 }
