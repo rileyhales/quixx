@@ -3,59 +3,30 @@ import React from "react";
 import NavBar from "./NavBar";
 import ScoreGroup from "./ScoreGroup";
 import ScoreFooter from "./ScoreFooter";
+import CleanState from "./CleanState";
+
+const localStorageItem = "quixx-react-state"
+
 
 class Quixx extends React.Component {
     constructor(props) {
         super(props)
 
-        const numberOfButtons = 12
-        const numberOfSkips = 4
-        const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
-        const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
-
-        this.state = {
-            undoState: null,
-            redoState: null,
-            red: {
-                color: "red",
-                isScored: Array(numberOfButtons).fill(false),
-                isClickable: Array(numberOfButtons).fill(true),
-                order: ascendOrder
-            },
-            yellow: {
-                color: "yellow",
-                isScored: Array(numberOfButtons).fill(false),
-                isClickable: Array(numberOfButtons).fill(true),
-                order: ascendOrder
-            },
-            green: {
-                color: "green",
-                isScored: Array(numberOfButtons).fill(false),
-                isClickable: Array(numberOfButtons).fill(true),
-                order: descendOrder
-            },
-            blue: {
-                color: "blue",
-                isScored: Array(numberOfButtons).fill(false),
-                isClickable: Array(numberOfButtons).fill(true),
-                order: descendOrder
-            },
-            scores: {
-                red: 0,
-                yellow: 0,
-                green: 0,
-                blue: 0,
-                skips: 0,
-                total: 0,
-            },
-            skips: Array(numberOfSkips).fill(false),
-        }
+        this.state = CleanState
 
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
         this.handleUndoButtonClick = this.handleUndoButtonClick.bind(this)
         this.handleRedoButtonClick = this.handleRedoButtonClick.bind(this)
         this.handleRestartButtonClick = this.handleRestartButtonClick.bind(this)
         this.handleSkipCheck = this.handleSkipCheck.bind(this)
+    }
+
+    cacheStateInLocalStorage() {
+        localStorage.setItem(localStorageItem, JSON.stringify(this.state))
+    }
+
+    componentDidMount() {
+        this.setState(JSON.parse(localStorage.getItem(localStorageItem)))
     }
 
     computeScore = function (count) {
@@ -102,7 +73,7 @@ class Quixx extends React.Component {
     handleRestartButtonClick = function () {
         this.setState(currentState => {
             if (currentState.undoState === null) {
-                return currentState
+                return CleanState
             }
             let revertState = currentState.undoState
             while (revertState.undoState !== null) {
@@ -121,6 +92,8 @@ class Quixx extends React.Component {
 
             currentState.skips[index] = !currentState.skips[index]
             currentState.scores = this.calculateAllScores(currentState)
+
+            this.cacheStateInLocalStorage()
             return currentState
         })
 
@@ -146,6 +119,8 @@ class Quixx extends React.Component {
 
             // calculate the new scores
             currentState.scores = this.calculateAllScores(currentState)
+
+            this.cacheStateInLocalStorage()
             return currentState
         })
     }

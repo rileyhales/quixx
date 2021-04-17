@@ -4,8 +4,6 @@ const ScoreSkips = function (props) {
     const checkboxes =
         props.skips.map(
             (value, index) => {
-                console.log(value)
-                console.log(index)
                 return <input
                     key={`skip${index}`}
                     type={"checkbox"}
