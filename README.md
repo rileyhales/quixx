@@ -7,11 +7,12 @@ Rules for Quixx are here: https://www.ultraboardgames.com/qwixx/game-rules.php
 
 Features:
 - Full score card interface
-- Colors to match the real game
+- Responsive to tall or wide screens
+- Colors that roughly match the real game
 - Automatically calculates score in real time
 - Scoring options/rules enforced  
 - Undo and Redo buttons
-- Responsive to tall or wide screens
+- Cache game state in local browser storage to come back to later and avoid loss of game progress in event of accidental refresh
 
 Layout:
 - Header section along the top with an undo, redo, and restart button
