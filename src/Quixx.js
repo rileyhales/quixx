@@ -26,7 +26,8 @@ class Quixx extends React.Component {
     }
 
     componentDidMount() {
-        this.setState(JSON.parse(localStorage.getItem(localStorageItem)))
+        const stateFromLocalStorage = JSON.parse(localStorage.getItem(localStorageItem))
+        this.setState(stateFromLocalStorage ? stateFromLocalStorage : CleanState)
     }
 
     computeScore = function (count) {
