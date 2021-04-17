@@ -21,8 +21,8 @@ class Quixx extends React.Component {
         this.handleSkipCheck = this.handleSkipCheck.bind(this)
     }
 
-    cacheStateInLocalStorage() {
-        localStorage.setItem(localStorageItem, JSON.stringify(this.state))
+    cacheStateInLocalStorage(newState) {
+        localStorage.setItem(localStorageItem, JSON.stringify(newState))
     }
 
     componentDidMount() {
@@ -71,16 +71,9 @@ class Quixx extends React.Component {
         })
     }
     handleRestartButtonClick = function () {
-        this.setState(currentState => {
-            if (currentState.undoState === null) {
-                return CleanState
-            }
-            let revertState = currentState.undoState
-            while (revertState.undoState !== null) {
-                revertState = revertState.undoState
-            }
-            revertState.redoState = null
-            return revertState
+        this.setState(() => {
+            this.cacheStateInLocalStorage(CleanState)
+            return CleanState
         })
     }
 
@@ -93,7 +86,7 @@ class Quixx extends React.Component {
             currentState.skips[index] = !currentState.skips[index]
             currentState.scores = this.calculateAllScores(currentState)
 
-            this.cacheStateInLocalStorage()
+            this.cacheStateInLocalStorage(currentState)
             return currentState
         })
 
@@ -120,7 +113,7 @@ class Quixx extends React.Component {
             // calculate the new scores
             currentState.scores = this.calculateAllScores(currentState)
 
-            this.cacheStateInLocalStorage()
+            this.cacheStateInLocalStorage(currentState)
             return currentState
         })
     }
