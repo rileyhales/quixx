@@ -12,7 +12,7 @@ class Quixx extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = CleanState
+        this.state = JSON.parse(JSON.stringify(CleanState))
 
         this.handleScoreButtonClick = this.handleScoreButtonClick.bind(this)
         this.handleUndoButtonClick = this.handleUndoButtonClick.bind(this)
@@ -27,7 +27,7 @@ class Quixx extends React.Component {
 
     componentDidMount() {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem(localStorageItem))
-        this.setState(stateFromLocalStorage ? stateFromLocalStorage : CleanState)
+        this.setState(stateFromLocalStorage ? stateFromLocalStorage : JSON.parse(JSON.stringify(CleanState)))
     }
 
     computeScore = function (count) {
@@ -72,9 +72,10 @@ class Quixx extends React.Component {
         })
     }
     handleRestartButtonClick = function () {
+        console.log(CleanState)
         this.setState(() => {
             this.cacheStateInLocalStorage(CleanState)
-            return CleanState
+            return JSON.parse(JSON.stringify(CleanState))
         })
     }
 
@@ -98,6 +99,7 @@ class Quixx extends React.Component {
             // cache a clone of the current state into the undo start queue, remove the redo queue
             currentState.undoState = JSON.parse(JSON.stringify(currentState))
             currentState.redoState = null
+            console.log(currentState)
 
             // figure out which index in the scoring/clickable arrays we're on
             const targetIndex = currentState[targetColor].order.indexOf(targetNumber)
@@ -115,6 +117,7 @@ class Quixx extends React.Component {
             currentState.scores = this.calculateAllScores(currentState)
 
             this.cacheStateInLocalStorage(currentState)
+            console.log(currentState)
             return currentState
         })
     }
