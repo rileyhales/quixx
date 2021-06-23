@@ -1,0 +1,36 @@
+.game-button-container {
+    margin-left: auto;
+}
+.game-button {
+    border: none;
+    background: none;
+}
+.game-button:disabled {
+    opacity: 20%;
+}
+.game-button > img {
+    height: 35px;
+    width: 35px;
+}
+.header {
+    width: 100%;
+    max-height: 8%;
+    flex: 1 1 auto;
+    background-color: orange;
+    display: flex;
+    flex-direction: row;
+}
+.header > * {
+    display: flex;
+    align-items: center;
+}
+.header-spacer {
+    height: 100%;
+    width: 100%;
+    padding: 0 20px;
+}
+.title {
+    font-size: 2em;
+    font-weight: bold;
+    padding: 10px;
+}
