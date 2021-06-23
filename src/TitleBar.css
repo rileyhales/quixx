@@ -6,7 +6,7 @@
     background: none;
 }
 .game-button:disabled {
-    opacity: 20%;
+    opacity: .2;
 }
 .game-button > img {
     height: 35px;
