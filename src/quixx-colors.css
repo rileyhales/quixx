@@ -1,13 +1,18 @@
-.bg-quixx-orange {background-color: orange;}
+.bg-quixx-orange {background-color: orange}
 
-.bg-quixx-red {background-color: red;}
-.bg-quixx-red-op {background-color: rgba(255, 0, 0, .6);}
+.bg-quixx-red {background-color: red}
+.bg-quixx-red-op {background-color: rgba(255, 0, 0, .6)}
 
-.bg-quixx-yellow {background-color: #cdb42f;}
-.bg-quixx-yellow-op {background-color: rgba(205, 180, 47, .6);}
+.bg-quixx-yel {background-color: #cdb42f}
+.bg-quixx-yel-op {background-color: rgba(205, 180, 47, .6)}
 
-.bg-quixx-green {background-color: green;}
-.bg-quixx-green-op {background-color: rgba(0, 128, 0, .6);}
+.bg-quixx-gre {background-color: green}
+.bg-quixx-gre-op {background-color: rgba(0, 128, 0, .6)}
 
-.bg-quixx-blue {background-color: #2525ff;}
-.bg-quixx-blue-op {background-color: rgba(37, 37, 255, 0.6);}
+.bg-quixx-blu {background-color: #2525ff}
+.bg-quixx-blu-op {background-color: rgba(37, 37, 255, 0.6)}
+
+.bg-quixx-skips {background-color: white}
+.bg-quixx-total {background-color: coral}
+
+.bg-quixx-grey {background-color: lightgrey}

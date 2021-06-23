@@ -1,26 +1,23 @@
 import React from "react";
 
-import ScoreButton from "./ScoreButton";
-import ScoreRowArrow from "./ScoreRowArrow";
+import "./ScoreGroup.css"
 
-const ScoreGroup = function (props) {
-    // add the arrow
-    const scorebuttons = [<ScoreRowArrow key={`${props.configs.color}-arrow`}/>,]
-        // then buttons for each number & the lock icon
-        .concat(
-            props.configs.order.map(
-                (number, index) => <ScoreButton
-                    key={`${props.configs.color}-${number}`}
-                    display={number}
-                    color={props.configs.color}
-                    isClickable={props.configs.isClickable[index]}
-                    isScored={props.configs.isScored[index]}
-                    handleScoreButtonClick={props.handleScoreButtonClick}/>
-            )
-        )
+const ScoreGroup = (props) => {
     return (
-        <div className={`score-group bg-quixx-${props.configs.color}`}>
-            {scorebuttons}
+        <div className={`score-group bg-quixx-${props.color}`}>
+            {
+                props.state[props.color].order.map((number, index) => {
+                    return (
+                        <button key={`${props.color}-${index}`}
+                                className={`score-button ${props.state[props.color].scored[index] ? "scored" : ""}`}
+                                disabled={!props.state[props.color].canClick[index]}
+                                onClick={() => props.click(props.color, number)}
+                                aria-label={"Scoring button"}>
+                            {number === "lock" ? <img className={"lock-icon"} src={process.env.PUBLIC_URL + "/lock-fill.svg"} alt={"lock icon"}/> : number}
+                        </button>
+                    )
+                })
+            }
         </div>
     )
 }
