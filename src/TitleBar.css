@@ -1,6 +1,3 @@
-.game-button-container {
-    margin-left: auto;
-}
 .game-button {
     border: none;
     background: none;
@@ -9,28 +6,29 @@
     opacity: .2;
 }
 .game-button > img {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
 }
 .header {
     width: 100%;
-    max-height: 8%;
+    min-height: 8%;
+    max-height: 10%;
     flex: 1 1 auto;
     background-color: orange;
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 .header > * {
     display: flex;
     align-items: center;
 }
-.header-spacer {
+.header-container {
     height: 100%;
-    width: 100%;
-    padding: 0 20px;
+    width: 90%;
+    justify-content: space-evenly;
 }
 .title {
     font-size: 2em;
     font-weight: bold;
-    padding: 10px;
 }

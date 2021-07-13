@@ -18,7 +18,7 @@ const scoresTemplate = {
     total: 0
 }
 
-const buttonStateTemplate = () => {
+const gameStateTemplate = () => {
     const buttonCount = 12
     const numSkips = 4
     const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
@@ -52,15 +52,16 @@ const buttonStateTemplate = () => {
 }
 
 const Quixx = () => {
-    const [gameState, setGameState] = useState(buttonStateTemplate())
+    const [gameState, setGameState] = useState(gameStateTemplate())
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
 
     const restart = () => {
-        setGameState(buttonStateTemplate())
+        setGameState(gameStateTemplate())
     }
     const skip = (index) => {
         setGameState((lastState) => {
             let newState = JSON.parse(JSON.stringify(lastState))
+            newState.undoState = JSON.parse(JSON.stringify(lastState))
             newState.skips[index] = !newState.skips[index]
             return newState
         })
@@ -94,28 +95,28 @@ const Quixx = () => {
     }
     const scoreButton = function (targetColor, targetNumber) {
         setGameState((currentState) => {
-            let nextState = JSON.parse(JSON.stringify(currentState))
-            nextState.undoState = JSON.parse(JSON.stringify(currentState))
-            nextState.redoState = null
+            let newState = JSON.parse(JSON.stringify(currentState))
+            newState.undoState = JSON.parse(JSON.stringify(currentState))
+            newState.redoState = null
             // figure out which index in the scoring/clickable arrays we're on
-            const targetIndex = nextState[targetColor].order.indexOf(targetNumber)
+            const targetIndex = newState[targetColor].order.indexOf(targetNumber)
             // toggle the scored status of the button
-            nextState[targetColor].scored[targetIndex] = !(nextState[targetColor].scored[targetIndex])
+            newState[targetColor].scored[targetIndex] = !(newState[targetColor].scored[targetIndex])
             // figure out what buttons should be clickable
-            const indexOfHighestScoredBox = nextState[targetColor].scored.lastIndexOf(true)
-            nextState[targetColor].canClick = nextState[targetColor].canClick.map((element, index) => {
+            const indexOfHighestScoredBox = newState[targetColor].scored.lastIndexOf(true)
+            newState[targetColor].canClick = newState[targetColor].canClick.map((element, index) => {
                 return !(index < indexOfHighestScoredBox)
             })
             // count if you can score 12/2 & the lock
-            const numScored = nextState[targetColor].scored.filter(Boolean).length
+            const numScored = newState[targetColor].scored.filter(Boolean).length
             if (numScored >= 5) {
-                nextState[targetColor].canClick[10] = true
-                nextState[targetColor].canClick[11] = true
+                newState[targetColor].canClick[10] = true
+                newState[targetColor].canClick[11] = true
             } else {
-                nextState[targetColor].canClick[10] = false
-                nextState[targetColor].canClick[11] = false
+                newState[targetColor].canClick[10] = false
+                newState[targetColor].canClick[11] = false
             }
-            return nextState
+            return newState
         })
     }
     const cacheState = (stateToCache) => {
