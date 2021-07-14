@@ -17,18 +17,22 @@ const MenuGroup = (props) => {
     const scoreBoxes = Object.keys(props.scores).map((color, index) => {
         return (
             <div key={index}
-                 className={`score-total bg-quixx-${color}`}>
+                 className={`score-total bg-quixx-${color}-score`}>
                 {props.scores[color]}
             </div>
         )
     })
     return (
         <div className={"score-group menu-group bg-quixx-grey"}>
+            <hr/>
             <div className={"menu-label"}>Skip</div>
             {skipCheckboxes}
             <hr/>
             <div className={"menu-label"}>Score</div>
             {scoreBoxes}
+            <hr/>
+            <div><a href={"https://rileyhales.com"}>&copy;RCH</a></div>
+            <div>v{process.env.REACT_APP_VERSION}</div>
         </div>
     )
 };

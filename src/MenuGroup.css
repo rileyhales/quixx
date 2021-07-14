@@ -1,7 +1,6 @@
 .skip-checkbox {
-    height: 40px;
-    width: 40px;
-    display: block;
+    height: 38px;
+    width: 38px;
 }
 .score-total {
     height: 45px;
@@ -22,7 +21,6 @@
     width: 90%;
 }
 .menu-label {
-    font-size: x-large;
+    font-size: large;
     font-weight: bold;
-    padding: 0;
 }

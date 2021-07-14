@@ -1,6 +1,6 @@
-import React, {useState, useEffect, lazy} from "react";
+import React, {useState, useEffect, lazy} from "react"
 
-import LoadingScreen from "./LoadingScreen";
+import LoadingScreen from "./LoadingScreen"
 
 import "./Quixx.css"
 import "./quixx-colors.css"
@@ -10,10 +10,10 @@ const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
 
 const scoresTemplate = {
-    red: 0,
-    yel: 0,
-    gre: 0,
     blu: 0,
+    gre: 0,
+    yel: 0,
+    red: 0,
     skips: 0,
     total: 0
 }
@@ -27,25 +27,25 @@ const gameStateTemplate = () => {
     return {
         undoState: null,
         redoState: null,
-        red: {
+        blu: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
-            order: ascendOrder
-        },
-        yel: {
-            scored: Array(buttonCount).fill(false),
-            canClick: Array(...clickable),
-            order: ascendOrder
+            order: descendOrder
         },
         gre: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
             order: descendOrder
         },
-        blu: {
+        yel: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
-            order: descendOrder
+            order: ascendOrder
+        },
+        red: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: ascendOrder
         },
         skips: Array(numSkips).fill(false),
     }
@@ -136,10 +136,10 @@ const Quixx = () => {
             const scoreBlu = computeScore(gameState.blu.scored.filter(Boolean).length)
             const scoreSkips = gameState.skips.filter(Boolean).length * -5
             return {
-                red: scoreRed,
-                yel: scoreYel,
-                gre: scoreGre,
                 blu: scoreBlu,
+                gre: scoreGre,
+                yel: scoreYel,
+                red: scoreRed,
                 skips: scoreSkips,
                 total: scoreRed + scoreYel + scoreGre + scoreBlu + scoreSkips
             }
