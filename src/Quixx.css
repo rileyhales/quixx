@@ -15,7 +15,7 @@ body, #root, .app-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 750px;
+    max-width: 675px;
 }
 .scores {
     width: 100%;

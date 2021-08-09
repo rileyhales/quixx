@@ -104,11 +104,12 @@ const Quixx = () => {
             newState[targetColor].scored[targetIndex] = !(newState[targetColor].scored[targetIndex])
             // figure out what buttons should be clickable
             const indexOfHighestScoredBox = newState[targetColor].scored.lastIndexOf(true)
+            // buttons lower than the one pressed are disabled
             newState[targetColor].canClick = newState[targetColor].canClick.map((element, index) => {
                 return !(index < indexOfHighestScoredBox)
             })
             // can only click 11th button (12 or 2) if the number of other buttons scored is 5 or more
-            newState[targetColor].canClick[10] = newState[targetColor].scored.filter(Boolean).length >= 5;
+            newState[targetColor].canClick[10] = newState[targetColor].scored.filter(Boolean).length >= 5 && !newState[targetColor].scored[11];
             return newState
         })
     }
