@@ -6,13 +6,20 @@ import "./MenuGroup.css"
 const MenuGroup = (props) => {
     const skipCheckboxes = props.state.skips.map(
         (value, index) => {
-            return <input
-                key={`skip${index}`}
-                className={"skip-checkbox"}
-                type={"checkbox"}
-                checked={value}
-                onChange={() => props.click(index)}
-                aria-label={"Skip turn marker"}/>
+            return (
+                <label key={index} className={"skip-label"}>
+                    <input
+                        className={"skip-input"}
+                        type={"checkbox"}
+                        checked={value}
+                        onChange={() => props.click(index)}
+                        aria-label={"Skip turn marker"}/>
+                    <span className={`skip-style-span`}>
+                        { index === 0 ? "S" : index === 1 ? "K" : index === 2 ? "I" : "P" }
+                    </span>
+                </label>
+
+            )
         })
     const scoreBoxes = Object.keys(props.scores).map((color, index) => {
         return (
@@ -24,7 +31,6 @@ const MenuGroup = (props) => {
     })
     return (
         <div className={"score-group menu-group bg-quixx-grey"}>
-            <hr/>
             <div className={"menu-label"}>Skip</div>
             {skipCheckboxes}
             <hr/>

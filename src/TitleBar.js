@@ -17,7 +17,11 @@ const TitleBar = (props) => {
                     <img alt="Restart Button" src={process.env.PUBLIC_URL + "/arrow-repeat.svg"}/>
                 </button>
                 <button className={"game-button"} onClick={() => props.goFullscreen()}>
-                    <img alt="Full Screen Button" src={process.env.PUBLIC_URL + "/fullscreen.svg"}/>
+                    {
+                        props.isFullScreen ?
+                            <img alt="Minimize Screen Button" src={process.env.PUBLIC_URL + "/minimize.svg"}/> :
+                            <img alt="Full Screen Button" src={process.env.PUBLIC_URL + "/fullscreen.svg"}/>
+                    }
                 </button>
             </div>
         </div>

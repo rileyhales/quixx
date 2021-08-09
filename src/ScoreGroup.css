@@ -15,7 +15,12 @@
     font-size: large;
     align-items: center;
     justify-content: center;
+    transition: all .4s ease-out;
+}
+.score-button:disabled {
+    transition: all .4s ease-out;
 }
 .scored {
     background-color: lawngreen;
+    transition: all .4s ease-out;
 }

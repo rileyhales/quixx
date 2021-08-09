@@ -1,19 +1,51 @@
-.skip-checkbox {
-    height: 38px;
-    width: 38px;
+.skip-label {
+    height: 35px;
+    width: 35px;
+    min-height: 35px;
+    min-width: 35px;
+    position: relative;
+    margin: 3px 0;
+    display: block;
+    border: 1px solid black;
 }
-.score-total {
-    height: 45px;
-    width: 45px;
+.skip-input {
+    opacity: 0;
+    height: 35px;
+    width: 35px;
+    position: absolute;
+}
+.skip-style-span {
+    height: 35px;
+    width: 35px;
+    position: absolute;
+    color: white;
+    font-weight: bolder;
+    font-size: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px;
+    text-align: center;
+}
+.skip-label .skip-style-span {
+    background-color: white;
+    transition: all 0.4s ease-out;
+}
+.skip-label input:checked ~ .skip-style-span {
+    color: white;
+    z-index: 999;
+    transition: all 0.4s ease-out;
+    background-color: tan;
+}
+
+.score-total {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
     font-size: large;
     font-weight: bold;
-}
-.menu-group {
-    justify-content: normal;
 }
 .menu-group > hr {
     border: 1px black solid;
