@@ -1,8 +1,8 @@
 .skip-label {
-    height: 35px;
-    width: 35px;
-    min-height: 35px;
-    min-width: 35px;
+    height: 36px;
+    width: 36px;
+    min-height: 36px;
+    min-width: 36px;
     position: relative;
     margin: 3px 0;
     display: block;
@@ -10,13 +10,13 @@
 }
 .skip-input {
     opacity: 0;
-    height: 35px;
-    width: 35px;
+    height: 36px;
+    width: 36px;
     position: absolute;
 }
 .skip-style-span {
-    height: 35px;
-    width: 35px;
+    height: 36px;
+    width: 36px;
     position: absolute;
     color: white;
     font-weight: bolder;
@@ -31,15 +31,15 @@
     transition: all 0.4s ease-out;
 }
 .skip-label input:checked ~ .skip-style-span {
-    color: white;
-    z-index: 999;
     transition: all 0.4s ease-out;
     background-color: tan;
 }
 
 .score-total {
-    height: 40px;
-    width: 40px;
+    height: 36px;
+    width: 36px;
+    min-height: 36px;
+    min-width: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
