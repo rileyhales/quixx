@@ -18,6 +18,8 @@ const scoresTemplate = {
     total: 0
 }
 
+const colorsList = ["blu", "gre", "yel", "red"]
+
 const gameStateTemplate = () => {
     const buttonCount = 12
     const numSkips = 4
@@ -153,10 +155,7 @@ const Quixx = () => {
             <div className={"app-container"}>
                 <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} state={gameState}/>
                 <div className={"scores"}>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"blu"}/>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"gre"}/>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"yel"}/>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"red"}/>
+                    {colorsList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
             </div>
