@@ -3,24 +3,11 @@
   "name": "Quixx Scorecard",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
       "src": "lock-fill.svg",
       "type": "image/svg"
     },
     {
-      "src": "caret-right-fill.svg",
-      "type": "image/svg"
-    },
-    {
       "src": "arrow-repeat.svg",
-      "type": "image/svg"
-    },
-    {
-      "src": "question-circle.svg",
       "type": "image/svg"
     },
     {
@@ -29,6 +16,10 @@
     },
     {
       "src": "arrow-clockwise.svg",
+      "type": "image/svg"
+    },
+    {
+      "src": "minimize.svg",
       "type": "image/svg"
     }
   ],

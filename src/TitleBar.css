@@ -1,23 +1,13 @@
-.game-button {
-    border: none;
-    background: none;
-}
-.game-button:disabled {
-    opacity: .2;
-}
-.game-button > img {
-    height: 30px;
-    width: 30px;
-}
 .header {
     width: 100%;
-    min-height: 8%;
-    max-height: 10%;
+    min-height: 6%;
+    max-height: 9%;
     flex: 1 1 auto;
     background-color: orange;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    border-bottom: 2px solid black;
 }
 .header > * {
     display: flex;
@@ -31,4 +21,15 @@
 .title {
     font-size: 1.75em;
     font-weight: bold;
+}
+.nav-button {
+    border: none;
+    background: none;
+}
+.nav-button:disabled {
+    opacity: .2;
+}
+.nav-button > img {
+    height: 30px;
+    width: 30px;
 }

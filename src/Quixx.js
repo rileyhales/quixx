@@ -18,12 +18,14 @@ const scoresTemplate = {
     total: 0
 }
 
+const colorsList = ["blu", "gre", "yel", "red"]
+
 const gameStateTemplate = () => {
     const buttonCount = 12
     const numSkips = 4
     const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
     const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
-    const clickable = [true, true, true, true, true, true, true, true, true, true, false, false]
+    const clickable = [true, true, true, true, true, true, true, true, true, true, false, true]
     return {
         undoState: null,
         redoState: null,
@@ -54,6 +56,7 @@ const gameStateTemplate = () => {
 const Quixx = () => {
     const [gameState, setGameState] = useState(gameStateTemplate())
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
+    const [isFullScreen, setIsFullScreen] = useState(false)
 
     const restart = () => {
         setGameState(gameStateTemplate())
@@ -84,14 +87,13 @@ const Quixx = () => {
         })
     }
     const goFullscreen = () => {
-        if (document.fullscreenElement) {
+        if (document.fullscreenElement !== null) {
             document.exitFullscreen()
+            setIsFullScreen(false)
         } else {
             document.getElementById("root").requestFullscreen()
+            setIsFullScreen(true)
         }
-    }
-    const computeScore = (count) => {
-        return count * (count + 1) / 2
     }
     const scoreButton = function (targetColor, targetNumber) {
         setGameState((currentState) => {
@@ -104,23 +106,24 @@ const Quixx = () => {
             newState[targetColor].scored[targetIndex] = !(newState[targetColor].scored[targetIndex])
             // figure out what buttons should be clickable
             const indexOfHighestScoredBox = newState[targetColor].scored.lastIndexOf(true)
+            // buttons lower than the one pressed are disabled
             newState[targetColor].canClick = newState[targetColor].canClick.map((element, index) => {
                 return !(index < indexOfHighestScoredBox)
             })
-            // count if you can score 12/2 & the lock
-            const numScored = newState[targetColor].scored.filter(Boolean).length
-            if (numScored >= 5) {
-                newState[targetColor].canClick[10] = true
-                newState[targetColor].canClick[11] = true
-            } else {
-                newState[targetColor].canClick[10] = false
-                newState[targetColor].canClick[11] = false
-            }
+            // can only click 11th button (12 or 2) if the number of other buttons scored is 5 or more
+            newState[targetColor].canClick[10] = newState[targetColor].scored.filter(Boolean).length >= 5 && !newState[targetColor].scored[11];
             return newState
         })
     }
     const cacheState = (stateToCache) => {
         localStorage.setItem("quixx-react-state", JSON.stringify(stateToCache))
+    }
+    const computeScore = (scoredList) => {
+        // computes score for a list of boolean scored/true and notScored/false values
+        let count = scoredList.filter(Boolean).length
+        // if the lock button (11th position) is scored and the 12/2 (10th position) is not, the lock button doesn't count for points
+        if (!scoredList[10] && scoredList[11]) count -= 1
+        return count * (count + 1) / 2
     }
 
     useEffect(() => {
@@ -130,10 +133,10 @@ const Quixx = () => {
 
     useEffect(() => {
         setScores(() => {
-            const scoreRed = computeScore(gameState.red.scored.filter(Boolean).length)
-            const scoreYel = computeScore(gameState.yel.scored.filter(Boolean).length)
-            const scoreGre = computeScore(gameState.gre.scored.filter(Boolean).length)
-            const scoreBlu = computeScore(gameState.blu.scored.filter(Boolean).length)
+            const scoreRed = computeScore(gameState.red.scored)
+            const scoreYel = computeScore(gameState.yel.scored)
+            const scoreGre = computeScore(gameState.gre.scored)
+            const scoreBlu = computeScore(gameState.blu.scored)
             const scoreSkips = gameState.skips.filter(Boolean).length * -5
             return {
                 blu: scoreBlu,
@@ -150,12 +153,9 @@ const Quixx = () => {
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
-                <TitleBar restart={restart} undo={undo} redo={redo} goFullscreen={goFullscreen} state={gameState}/>
+                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} state={gameState}/>
                 <div className={"scores"}>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"blu"}/>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"gre"}/>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"yel"}/>
-                    <ScoreGroup state={gameState} click={scoreButton} color={"red"}/>
+                    {colorsList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
             </div>

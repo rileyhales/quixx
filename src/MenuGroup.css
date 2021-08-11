@@ -1,19 +1,38 @@
-.skip-checkbox {
-    height: 38px;
-    width: 38px;
+.skip-label {
+    position: relative;
+    margin: 3px 0;
+    display: block;
+    border: 1px solid black;
 }
-.score-total {
-    height: 45px;
-    width: 45px;
+.skip-input {
+    opacity: 0;
+    margin: 0;
+    position: absolute;
+}
+.skip-style-span {
+    margin: 0;
+    position: absolute;
+    color: white;
+    font-weight: bolder;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px;
+    text-align: center;
+}
+.skip-label .skip-style-span {
+    background-color: white;
+    transition: all 0.4s ease-out;
+}
+.skip-label input:checked ~ .skip-style-span {
+    transition: all 0.4s ease-out;
+    background-color: tan;
+}
+.score-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: large;
     font-weight: bold;
-}
-.menu-group {
-    justify-content: normal;
 }
 .menu-group > hr {
     border: 1px black solid;

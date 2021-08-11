@@ -15,12 +15,33 @@ body, #root, .app-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 750px;
+    max-width: 675px;
 }
-.scores {
-    width: 100%;
-    height: 90%;
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: row;
+
+.button-sizes {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 35px;
+    margin: 4px;
+    border-radius: 3px;
+}
+@media (max-height: 665px) {
+    .button-sizes {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+        min-height: 35px;
+        font-size: 30px;
+    }
+}
+@media (max-height: 600px) {
+    .button-sizes {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+        font-size: 25px;
+    }
 }
