@@ -8,6 +8,7 @@ import "./quixx-colors.css"
 const TitleBar = lazy(() => import("./TitleBar"))
 const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
+const OptionsModal = lazy(() => import("./OptionsModal"))
 
 const scoresTemplate = {
     blu: 0,
@@ -121,22 +122,59 @@ const gameStateTemplate_QuixxMixxColors = () => {
     }
 }
 
+const gameStateTemplate_QuixxSequentialColors = () => {
+    const colors = ['red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu']
+    return {
+        undoState: null,
+        redoState: null,
+        g1: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: descendOrder,
+            color: colors
+        },
+        g2: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: descendOrder,
+            color: colors
+        },
+        g3: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: ascendOrder,
+            color: colors
+        },
+        g4: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: ascendOrder,
+            color: colors
+        },
+        skips: Array(numSkips).fill(false),
+    }
+}
+
 const Quixx = () => {
     const [gameState, setGameState] = useState(gameStateTemplate_Quixx())
     const [gameBoard, setGameBoard] = useState('Quixx')
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
     const [isFullScreen, setIsFullScreen] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false)
 
     const restart = () => {
         switch (gameBoard) {
-            case "Quixx":
+            case "q1":
                 setGameState(gameStateTemplate_Quixx())
                 break
-            case "QuixxMixxNumbers":
+            case "q2":
                 setGameState(gameStateTemplate_QuixxMixxNumbers())
                 break
-            case "QuixxMixxColors":
+            case "q3":
                 setGameState(gameStateTemplate_QuixxMixxColors())
+                break
+            case "q4":
+                setGameState(gameStateTemplate_QuixxSequentialColors())
                 break
             default:
                 setGameState(gameStateTemplate_Quixx())
@@ -206,6 +244,7 @@ const Quixx = () => {
         if (!scoredList[10] && scoredList[11]) count -= 1
         return count * (count + 1) / 2
     }
+    const toggleModal = () => {setModalVisible(prevState => {return !prevState})}
 
     useEffect(() => {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem("quixx-react-state"))
@@ -238,11 +277,12 @@ const Quixx = () => {
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
-                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} gameBoard={gameBoard} setGameBoard={setGameBoard} state={gameState}/>
+                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} toggleModal={toggleModal} state={gameState}/>
                 <div className={"scores"}>
                     {groupList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
+                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} setGameBoard={setGameBoard}/>
             </div>
         </React.Suspense>
     )
