@@ -1,6 +1,7 @@
 import React, {useState, useEffect, lazy} from "react"
 
 import LoadingScreen from "./LoadingScreen"
+import GameStates from "./GameStates";
 
 import "./Quixx.css"
 import "./quixx-colors.css"
@@ -8,6 +9,7 @@ import "./quixx-colors.css"
 const TitleBar = lazy(() => import("./TitleBar"))
 const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
+const OptionsModal = lazy(() => import("./OptionsModal"))
 
 const scoresTemplate = {
     blu: 0,
@@ -18,48 +20,32 @@ const scoresTemplate = {
     total: 0
 }
 
-const colorsList = ["blu", "gre", "yel", "red"]
-
-const gameStateTemplate = () => {
-    const buttonCount = 12
-    const numSkips = 4
-    const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
-    const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
-    const clickable = [true, true, true, true, true, true, true, true, true, true, false, true]
-    return {
-        undoState: null,
-        redoState: null,
-        blu: {
-            scored: Array(buttonCount).fill(false),
-            canClick: Array(...clickable),
-            order: descendOrder
-        },
-        gre: {
-            scored: Array(buttonCount).fill(false),
-            canClick: Array(...clickable),
-            order: descendOrder
-        },
-        yel: {
-            scored: Array(buttonCount).fill(false),
-            canClick: Array(...clickable),
-            order: ascendOrder
-        },
-        red: {
-            scored: Array(buttonCount).fill(false),
-            canClick: Array(...clickable),
-            order: ascendOrder
-        },
-        skips: Array(numSkips).fill(false),
-    }
-}
+const groupList = ["g1", "g2", "g3", "g4"]
 
 const Quixx = () => {
-    const [gameState, setGameState] = useState(gameStateTemplate())
+    const [gameState, setGameState] = useState(GameStates.quixx())
+    const [gameBoard, setGameBoard] = useState('Quixx')
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
     const [isFullScreen, setIsFullScreen] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false)
 
     const restart = () => {
-        setGameState(gameStateTemplate())
+        switch (gameBoard) {
+            case "q1":
+                setGameState(GameStates.quixx())
+                break
+            case "q2":
+                setGameState(GameStates.quixxMixxNumbers())
+                break
+            case "q3":
+                setGameState(GameStates.quixxMixxColors())
+                break
+            case "q4":
+                setGameState(GameStates.sequential())
+                break
+            default:
+                setGameState(GameStates.quixx())
+        }
     }
     const skip = (index) => {
         setGameState((lastState) => {
@@ -125,6 +111,7 @@ const Quixx = () => {
         if (!scoredList[10] && scoredList[11]) count -= 1
         return count * (count + 1) / 2
     }
+    const toggleModal = () => {setModalVisible(prevState => {return !prevState})}
 
     useEffect(() => {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem("quixx-react-state"))
@@ -133,31 +120,36 @@ const Quixx = () => {
 
     useEffect(() => {
         setScores(() => {
-            const scoreRed = computeScore(gameState.red.scored)
-            const scoreYel = computeScore(gameState.yel.scored)
-            const scoreGre = computeScore(gameState.gre.scored)
-            const scoreBlu = computeScore(gameState.blu.scored)
+            const scoreG1 = computeScore(gameState.g1.scored)
+            const scoreG2 = computeScore(gameState.g2.scored)
+            const scoreG3 = computeScore(gameState.g3.scored)
+            const scoreG4 = computeScore(gameState.g4.scored)
             const scoreSkips = gameState.skips.filter(Boolean).length * -5
             return {
-                blu: scoreBlu,
-                gre: scoreGre,
-                yel: scoreYel,
-                red: scoreRed,
+                blu: scoreG1,
+                gre: scoreG2,
+                yel: scoreG3,
+                red: scoreG4,
                 skips: scoreSkips,
-                total: scoreRed + scoreYel + scoreGre + scoreBlu + scoreSkips
+                total: scoreG1 + scoreG2 + scoreG3 + scoreG4 + scoreSkips
             }
         })
         cacheState(gameState)
     }, [gameState,])
 
+    useEffect(() => {
+        restart()
+    }, [gameBoard])
+
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
-                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} state={gameState}/>
+                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} toggleModal={toggleModal} state={gameState}/>
                 <div className={"scores"}>
-                    {colorsList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
+                    {groupList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
+                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} setGameBoard={setGameBoard}/>
             </div>
         </React.Suspense>
     )
