@@ -7,8 +7,10 @@
     background: rgba(0,0,0,.7);
 }
 .modal-content {
-    width: 50%;
+    width: 90%;
     height: 50%;
+    margin-left: 3%;
+    margin-right: 3%;
     text-align: center;
     margin-top: 20%;
     background: cornsilk;
@@ -48,12 +50,4 @@
     width: 85%;
     padding: .25em 0;
     margin: .25em 0;
-}
-
-@media (orientation: portrait) {
-    .modal-content {
-        width: 90%;
-        margin-left: 3%;
-        margin-right: 3%;
-    }
 }
