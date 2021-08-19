@@ -18,48 +18,129 @@ const scoresTemplate = {
     total: 0
 }
 
-const colorsList = ["blu", "gre", "yel", "red"]
+const groupList = ["g1", "g2", "g3", "g4"]
+const buttonCount = 12
+const numSkips = 4
+const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
+const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
+const clickable = [true, true, true, true, true, true, true, true, true, true, false, true]
 
-const gameStateTemplate = () => {
-    const buttonCount = 12
-    const numSkips = 4
-    const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
-    const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
-    const clickable = [true, true, true, true, true, true, true, true, true, true, false, true]
+const gameStateTemplate_Quixx = () => {
     return {
         undoState: null,
         redoState: null,
-        blu: {
+        g1: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
-            order: descendOrder
+            order: descendOrder,
+            color: Array(buttonCount).fill('blu')
         },
-        gre: {
+        g2: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
-            order: descendOrder
+            order: descendOrder,
+            color: Array(buttonCount).fill('gre')
         },
-        yel: {
+        g3: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
-            order: ascendOrder
+            order: ascendOrder,
+            color: Array(buttonCount).fill('yel')
         },
-        red: {
+        g4: {
             scored: Array(buttonCount).fill(false),
             canClick: Array(...clickable),
-            order: ascendOrder
+            order: ascendOrder,
+            color: Array(buttonCount).fill('red')
+        },
+        skips: Array(numSkips).fill(false),
+    }
+}
+
+const gameStateTemplate_QuixxMixxNumbers = () => {
+    return {
+        undoState: null,
+        redoState: null,
+        g1: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: [5, 7, 11, 9, 12, 3, 8, 10, 2, 6, 4, "lock"],
+            color: Array(buttonCount).fill('blu')
+        },
+        g2: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: [8, 2, 10, 12, 6, 9, 7, 4, 5, 11, 3, "lock"],
+            color: Array(buttonCount).fill('gre')
+        },
+        g3: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: [9, 12, 4, 6, 7, 2, 5, 8, 11, 3, 10, "lock"],
+            color: Array(buttonCount).fill('yel')
+        },
+        g4: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: [10, 6, 2, 8, 3, 4, 12, 5, 9, 7, 11, "lock"],
+            color: Array(buttonCount).fill('red')
+        },
+        skips: Array(numSkips).fill(false),
+    }
+}
+
+const gameStateTemplate_QuixxMixxColors = () => {
+    return {
+        undoState: null,
+        redoState: null,
+        g1: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: descendOrder,
+            color: ['gre', 'gre', 'red', 'red', 'red', 'red', 'yel', 'yel', 'blu', 'blu', 'blu', 'blu']
+        },
+        g2: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: descendOrder,
+            color: ['blu', 'blu', 'blu', 'yel', 'yel', 'yel', 'red', 'red', 'red', 'gre', 'gre', 'gre']
+        },
+        g3: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: ascendOrder,
+            color: ['red', 'red', 'gre', 'gre', 'gre', 'gre', 'blu', 'blu', 'yel', 'yel', 'yel', 'yel']
+        },
+        g4: {
+            scored: Array(buttonCount).fill(false),
+            canClick: Array(...clickable),
+            order: ascendOrder,
+            color: ['yel', 'yel', 'yel', 'blu', 'blu', 'blu', 'gre', 'gre', 'gre', 'red', 'red', 'red']
         },
         skips: Array(numSkips).fill(false),
     }
 }
 
 const Quixx = () => {
-    const [gameState, setGameState] = useState(gameStateTemplate())
+    const [gameBoard, setGameBoard] = useState('Quixx')
+    const [gameState, setGameState] = useState(gameStateTemplate_Quixx())
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
     const [isFullScreen, setIsFullScreen] = useState(false)
 
     const restart = () => {
-        setGameState(gameStateTemplate())
+        switch (gameBoard) {
+            case "Quixx":
+                setGameState(gameStateTemplate_Quixx())
+                break
+            case "QuixxMixxNumbers":
+                setGameState(gameStateTemplate_QuixxMixxNumbers())
+                break
+            case "QuixxMixxColors":
+                setGameState(gameStateTemplate_QuixxMixxColors())
+                break
+            default:
+                setGameState(gameStateTemplate_Quixx())
+        }
     }
     const skip = (index) => {
         setGameState((lastState) => {
@@ -133,29 +214,33 @@ const Quixx = () => {
 
     useEffect(() => {
         setScores(() => {
-            const scoreRed = computeScore(gameState.red.scored)
-            const scoreYel = computeScore(gameState.yel.scored)
-            const scoreGre = computeScore(gameState.gre.scored)
-            const scoreBlu = computeScore(gameState.blu.scored)
+            const scoreG1 = computeScore(gameState.g1.scored)
+            const scoreG2 = computeScore(gameState.g2.scored)
+            const scoreG3 = computeScore(gameState.g3.scored)
+            const scoreG4 = computeScore(gameState.g4.scored)
             const scoreSkips = gameState.skips.filter(Boolean).length * -5
             return {
-                blu: scoreBlu,
-                gre: scoreGre,
-                yel: scoreYel,
-                red: scoreRed,
+                blu: scoreG1,
+                gre: scoreG2,
+                yel: scoreG3,
+                red: scoreG4,
                 skips: scoreSkips,
-                total: scoreRed + scoreYel + scoreGre + scoreBlu + scoreSkips
+                total: scoreG1 + scoreG2 + scoreG3 + scoreG4 + scoreSkips
             }
         })
         cacheState(gameState)
     }, [gameState,])
+
+    useEffect(() => {
+        restart()
+    }, [gameBoard])
 
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
                 <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} state={gameState}/>
                 <div className={"scores"}>
-                    {colorsList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
+                    {groupList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
             </div>

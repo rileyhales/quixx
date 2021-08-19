@@ -11,7 +11,7 @@ const ScoreGroup = (props) => {
                     if (props.state.scored[index]) classes.push("scored")
                     if (number === "lock" && !props.state.scored[10]) classes.push("locked")
                     return (
-                        <div className={`bg-quixx-${props.color} score-button-wrapper`}>
+                        <div className={`bg-quixx-${props.state.color[index]} score-button-wrapper`}>
                             <button key={index}
                                     className={classes.join(" ")}
                                     disabled={!props.state.canClick[index]}
