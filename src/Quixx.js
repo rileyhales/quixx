@@ -122,8 +122,8 @@ const gameStateTemplate_QuixxMixxColors = () => {
 }
 
 const Quixx = () => {
-    const [gameBoard, setGameBoard] = useState('Quixx')
     const [gameState, setGameState] = useState(gameStateTemplate_Quixx())
+    const [gameBoard, setGameBoard] = useState('Quixx')
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
     const [isFullScreen, setIsFullScreen] = useState(false)
 
@@ -238,7 +238,7 @@ const Quixx = () => {
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
-                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} state={gameState}/>
+                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} gameBoard={gameBoard} setGameBoard={setGameBoard} state={gameState}/>
                 <div className={"scores"}>
                     {groupList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>

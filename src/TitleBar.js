@@ -18,6 +18,25 @@ const TitleBar = (props) => {
                 <button className={navButtonClass} onClick={() => props.restart()}>
                     <img alt="Restart Button" src={process.env.PUBLIC_URL + "/arrow-repeat.svg"}/>
                 </button>
+                <button className={navButtonClass} onClick={
+                    () => {
+                        switch (props.gameBoard) {
+                            case "Quixx":
+                                props.setGameBoard("QuixxMixxNumbers")
+                                break
+                            case "QuixxMixxNumbers":
+                                props.setGameBoard("QuixxMixxColors")
+                                break
+                            case "QuixxMixxColors":
+                                props.setGameBoard("Quixx")
+                                break
+                            default:
+                                props.setGameBoard("Quixx")
+                        }
+                    }
+                }>
+                    <img alt="Toggle Board" src={process.env.PUBLIC_URL + "/gameboard.svg"}/>
+                </button>
                 <button className={navButtonClass} onClick={() => props.goFullscreen()}>
                     {
                         props.isFullScreen ?
