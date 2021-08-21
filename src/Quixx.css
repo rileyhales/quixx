@@ -18,7 +18,7 @@ body, #root, .app-container {
     max-width: 675px;
 }
 
-.button-sizes {
+.btn-sizes {
     width: 40px;
     height: 40px;
     min-width: 40px;
@@ -28,7 +28,7 @@ body, #root, .app-container {
     border-radius: 3px;
 }
 @media (max-height: 665px) {
-    .button-sizes {
+    .btn-sizes {
         width: 35px;
         height: 35px;
         min-width: 35px;
@@ -37,7 +37,7 @@ body, #root, .app-container {
     }
 }
 @media (max-height: 600px) {
-    .button-sizes {
+    .btn-sizes {
         width: 30px;
         height: 30px;
         min-width: 30px;

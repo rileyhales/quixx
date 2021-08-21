@@ -2,7 +2,7 @@ import React from "react"
 
 import "./TitleBar.css"
 
-const navButtonClass = "nav-button"
+const navButtonClass = "nav-btn"
 
 const TitleBar = (props) => {
     return (

@@ -43,6 +43,12 @@ const Quixx = () => {
             case "q4":
                 setGameState(GameStates.sequential())
                 break
+            case "q5":
+                setGameState(GameStates.randomNum())
+                break
+            case "q6":
+                setGameState(GameStates.lessSkips())
+                break
             default:
                 setGameState(GameStates.quixx())
         }
@@ -87,7 +93,7 @@ const Quixx = () => {
             newState.undoState = JSON.parse(JSON.stringify(currentState))
             newState.redoState = null
             // figure out which index in the scoring/clickable arrays we're on
-            const targetIndex = newState[targetColor].order.indexOf(targetNumber)
+            const targetIndex = newState[targetColor].nums.indexOf(targetNumber)
             // toggle the scored status of the button
             newState[targetColor].scored[targetIndex] = !(newState[targetColor].scored[targetIndex])
             // figure out what buttons should be clickable
