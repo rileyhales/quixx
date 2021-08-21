@@ -22,14 +22,14 @@
     font-size: 1.75em;
     font-weight: bold;
 }
-.nav-button {
+.nav-btn {
     border: none;
     background: none;
 }
-.nav-button:disabled {
+.nav-btn:disabled {
     opacity: .2;
 }
-.nav-button > img {
+.nav-btn > img {
     height: 30px;
     width: 30px;
 }

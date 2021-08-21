@@ -8,11 +8,11 @@
 }
 .modal-content {
     width: 90%;
-    height: 50%;
+    height: 60%;
     margin-left: 3%;
     margin-right: 3%;
     text-align: center;
-    margin-top: 20%;
+    margin-top: 15%;
     background: cornsilk;
     padding: 2%;
     display: flex;
@@ -25,8 +25,12 @@
     flex: 1 1 auto;
     border: 1px solid;
     padding: .5em;
+    overflow: auto;
 }
-.modal-button {
+.modal-body-divider {
+    font-weight: bold;
+}
+.modal-btn {
     width: 90%;
     padding: .5em 0;
     margin: .5em 0;

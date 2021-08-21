@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: space-evenly;
 }
-.score-button {
+.score-btn {
     display: flex;
     font-weight: bold;
     font-size: large;
@@ -21,7 +21,7 @@
     justify-content: center;
     transition: all .4s ease-out;
 }
-.score-button:disabled {
+.score-btn:disabled {
     transition: all .4s ease-out;
 }
 .scored {
@@ -32,7 +32,7 @@
     background-color: orange;
     transition: all .4s ease-out;
 }
-.score-button-wrapper {
+.score-btn-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
