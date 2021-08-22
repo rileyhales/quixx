@@ -1,7 +1,7 @@
 import React, {useState, useEffect, lazy} from "react"
 
 import LoadingScreen from "./LoadingScreen"
-import GameStates from "./GameStates";
+import GameBoards from "./GameBoards";
 
 import "./Quixx.css"
 import "./quixx-colors.css"
@@ -20,41 +20,48 @@ const scoresTemplate = {
     total: 0
 }
 
-const groupList = ["g1", "g2", "g3", "g4"]
+const GROUPLIST = ["g1", "g2", "g3", "g4"]
+const BOARDS = {
+    q1: GameBoards.quixx,
+    q2: GameBoards.quixxMixxNumbers,
+    q3: GameBoards.quixxMixxColors,
+    q4: GameBoards.sequential,
+    q5: GameBoards.randomNum,
+    q6: GameBoards.lessSkips
+}
 
 const Quixx = () => {
-    const [gameState, setGameState] = useState(GameStates.quixx())
-    const [gameBoard, setGameBoard] = useState('Quixx')
+    const [gameScores, setGameScores] = useState(GameBoards.quixx())
+    const [gameBoard, setGameBoard] = useState("q1")
+
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
     const restart = () => {
-        switch (gameBoard) {
-            case "q1":
-                setGameState(GameStates.quixx())
-                break
-            case "q2":
-                setGameState(GameStates.quixxMixxNumbers())
-                break
-            case "q3":
-                setGameState(GameStates.quixxMixxColors())
-                break
-            case "q4":
-                setGameState(GameStates.sequential())
-                break
-            case "q5":
-                setGameState(GameStates.randomNum())
-                break
-            case "q6":
-                setGameState(GameStates.lessSkips())
-                break
-            default:
-                setGameState(GameStates.quixx())
-        }
+        setGameScores(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            GROUPLIST.forEach(group => {
+                newState[group].scored = Array(...GameBoards.scored)
+                newState[group].canClick = Array(...GameBoards.clickable)
+            })
+            return newState
+        })
+    }
+    const changeBoards = () => {
+        const newBoard = BOARDS[gameBoard]()
+        setGameScores(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            GROUPLIST.forEach(group => {
+                newState[group].color = newBoard[group].color
+                newState[group].nums = newBoard[group].nums
+            })
+            newState.board = gameBoard
+            return newState
+        })
     }
     const skip = (index) => {
-        setGameState((lastState) => {
+        setGameScores((lastState) => {
             let newState = JSON.parse(JSON.stringify(lastState))
             newState.undoState = JSON.parse(JSON.stringify(lastState))
             newState.skips[index] = !newState.skips[index]
@@ -62,8 +69,8 @@ const Quixx = () => {
         })
     }
     const redo = () => {
-        if (gameState.redoState === null) return
-        setGameState(currentState => {
+        if (gameScores.redoState === null) return
+        setGameScores(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState))
             // cache a clone of the current state as the state to "undo"
             newState.redoState.undoState = JSON.parse(JSON.stringify(currentState))
@@ -71,8 +78,8 @@ const Quixx = () => {
         })
     }
     const undo = () => {
-        if (gameState.undoState === null) return
-        setGameState(currentState => {
+        if (gameScores.undoState === null) return
+        setGameScores(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState.undoState))
             newState.redoState = JSON.parse(JSON.stringify(currentState))
             return newState
@@ -87,23 +94,33 @@ const Quixx = () => {
             setIsFullScreen(true)
         }
     }
-    const scoreButton = function (targetColor, targetNumber) {
-        setGameState((currentState) => {
+    const scoreButton = function (btnGroup, btnNumber) {
+        setGameScores((currentState) => {
             let newState = JSON.parse(JSON.stringify(currentState))
             newState.undoState = JSON.parse(JSON.stringify(currentState))
             newState.redoState = null
             // figure out which index in the scoring/clickable arrays we're on
-            const targetIndex = newState[targetColor].nums.indexOf(targetNumber)
+            const btnIndex = newState[btnGroup].nums.indexOf(btnNumber)
             // toggle the scored status of the button
-            newState[targetColor].scored[targetIndex] = !(newState[targetColor].scored[targetIndex])
+            newState[btnGroup].scored[btnIndex] = !(newState[btnGroup].scored[btnIndex])
             // figure out what buttons should be clickable
-            const indexOfHighestScoredBox = newState[targetColor].scored.lastIndexOf(true)
+            const indexOfHighestScoredBox = newState[btnGroup].scored.lastIndexOf(true)
             // buttons lower than the one pressed are disabled
-            newState[targetColor].canClick = newState[targetColor].canClick.map((element, index) => {
+            newState[btnGroup].canClick = newState[btnGroup].canClick.map((element, index) => {
                 return !(index < indexOfHighestScoredBox)
             })
             // can only click 11th button (12 or 2) if the number of other buttons scored is 5 or more
-            newState[targetColor].canClick[10] = newState[targetColor].scored.filter(Boolean).length >= 5 && !newState[targetColor].scored[11];
+            newState[btnGroup].canClick[10] = newState[btnGroup].scored.filter(Boolean).length >= 5 && !newState[btnGroup].scored[11];
+
+            // End of game logic when a lock button is pressed
+            // if (btnIndex === 11) {
+            //     const numLocks = groupList.reduce((sum, group) => {
+            //         return newState[group].scored[btnIndex] ? sum + 1 : sum
+            //     }, 0)
+            //     if (numLocks === 1 && newState[btnGroup].scored[btnIndex]) alert(`Remove the ${newState[btnGroup].color[btnIndex]} Dice`)
+            //     if (numLocks === 2) alert("Game over")
+            // }
+
             return newState
         })
     }
@@ -121,16 +138,20 @@ const Quixx = () => {
 
     useEffect(() => {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem("quixx-react-state"))
-        if (stateFromLocalStorage !== null) setGameState(stateFromLocalStorage)
+        if (stateFromLocalStorage !== null) {
+            setGameScores(stateFromLocalStorage)
+            setGameBoard(stateFromLocalStorage.board)
+        }
     }, [])
 
     useEffect(() => {
+        console.log("state changes")
         setScores(() => {
-            const scoreG1 = computeScore(gameState.g1.scored)
-            const scoreG2 = computeScore(gameState.g2.scored)
-            const scoreG3 = computeScore(gameState.g3.scored)
-            const scoreG4 = computeScore(gameState.g4.scored)
-            const scoreSkips = gameState.skips.filter(Boolean).length * -5
+            const scoreG1 = computeScore(gameScores.g1.scored)
+            const scoreG2 = computeScore(gameScores.g2.scored)
+            const scoreG3 = computeScore(gameScores.g3.scored)
+            const scoreG4 = computeScore(gameScores.g4.scored)
+            const scoreSkips = gameScores.skips.filter(Boolean).length * -5
             return {
                 blu: scoreG1,
                 gre: scoreG2,
@@ -140,20 +161,28 @@ const Quixx = () => {
                 total: scoreG1 + scoreG2 + scoreG3 + scoreG4 + scoreSkips
             }
         })
-        cacheState(gameState)
-    }, [gameState,])
+        cacheState(gameScores)
+        console.log("cached state")
+    }, [gameScores,])
 
     useEffect(() => {
-        restart()
+        console.log("changing boards")
+        changeBoards()
     }, [gameBoard])
 
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
-                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} toggleModal={toggleModal} state={gameState}/>
+                <TitleBar restart={restart}
+                          undo={undo}
+                          redo={redo}
+                          isFullScreen={isFullScreen}
+                          goFullscreen={goFullscreen}
+                          toggleModal={toggleModal}
+                          state={gameScores}/>
                 <div className={"scores"}>
-                    {groupList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
-                    <MenuGroup state={gameState} click={skip} scores={scores}/>
+                    {GROUPLIST.map((group, index) => <ScoreGroup key={index} state={gameScores[group]} group={group} click={scoreButton}/>)}
+                    <MenuGroup state={gameScores} click={skip} scores={scores}/>
                 </div>
                 <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} setGameBoard={setGameBoard}/>
             </div>

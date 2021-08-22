@@ -3,6 +3,7 @@ const numSkips = 4
 const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
 const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
 const clickable = [true, true, true, true, true, true, true, true, true, true, false, true]
+const scored = Array(buttonCount).fill(false)
 
 const shuffled = () => {
     const allNums = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -18,26 +19,27 @@ const quixx = () => {
     return {
         undoState: null,
         redoState: null,
+        board: "q1",
         g1: {
-            scored: Array(buttonCount).fill(false),
+            scored: Array(...scored),
             canClick: Array(...clickable),
             nums: descendOrder,
             color: Array(buttonCount).fill('blu')
         },
         g2: {
-            scored: Array(buttonCount).fill(false),
+            scored: Array(...scored),
             canClick: Array(...clickable),
             nums: descendOrder,
             color: Array(buttonCount).fill('gre')
         },
         g3: {
-            scored: Array(buttonCount).fill(false),
+            scored: Array(...scored),
             canClick: Array(...clickable),
             nums: ascendOrder,
             color: Array(buttonCount).fill('yel')
         },
         g4: {
-            scored: Array(buttonCount).fill(false),
+            scored: Array(...scored),
             canClick: Array(...clickable),
             nums: ascendOrder,
             color: Array(buttonCount).fill('red')
@@ -89,12 +91,16 @@ const lessSkips = () => {
     return state
 }
 
-export default {
+const GameBoards = {
     quixx,
     quixxMixxNumbers,
     quixxMixxColors,
     sequential,
     randomNum,
-    lessSkips
+    lessSkips,
 
+    clickable,
+    scored
 }
+
+export default GameBoards

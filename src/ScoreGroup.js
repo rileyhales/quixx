@@ -13,11 +13,10 @@ const ScoreGroup = (props) => {
                     if (props.state.scored[index]) classes.push("scored")
                     if (number === "lock" && !props.state.scored[10]) classes.push("locked")
                     return (
-                        <div className={`bg-quixx-${props.state.color[index]} score-btn-wrapper`}>
-                            <button key={index}
-                                    className={classes.join(" ")}
+                        <div key={index} className={`bg-quixx-${props.state.color[index]} score-btn-wrapper`}>
+                            <button className={classes.join(" ")}
                                     disabled={!props.state.canClick[index]}
-                                    onClick={() => props.click(props.color, number)}
+                                    onClick={() => props.click(props.group, number)}
                                     aria-label={"scoring button"}>
                                 {number === "lock" ? <img className={"lock-icon"} src={process.env.PUBLIC_URL + "/lock-fill.svg"} alt={"lock icon"}/> : number}
                             </button>
