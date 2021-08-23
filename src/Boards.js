@@ -4,22 +4,45 @@ const ascendOrder = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "lock"]
 const descendOrder = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, "lock"]
 const clickable = [true, true, true, true, true, true, true, true, true, true, false, true]
 const scored = Array(buttonCount).fill(false)
+const allNums = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const allCols = ["blu", "gre", "yel", "red"]
 
-const shuffled = () => {
-    const allNums = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    for (let i = allNums.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [allNums[i], allNums[j]] = [allNums[j], allNums[i]];
+
+const shuffle = (arr, mixCount) => {
+    let count = 0
+    while (count < mixCount) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        count = count + 1
     }
-    allNums.push("lock")
-    return allNums
+    return arr
+}
+
+const mixColors = () => {
+    let g1 = []
+    let g2 = []
+    let g3 = []
+    let g4 = []
+    Array(buttonCount - 1).fill(null).forEach(_ => {
+        const newColors = shuffle(allCols.slice(0), 15)
+        g1.push(newColors[0])
+        g2.push(newColors[1])
+        g3.push(newColors[2])
+        g4.push(newColors[3])
+    })
+    g1.push(allCols[0])
+    g2.push(allCols[1])
+    g3.push(allCols[2])
+    g4.push(allCols[3])
+    return [g1, g2, g3, g4]
 }
 
 const quixx = () => {
     return {
         undoState: null,
         redoState: null,
-        board: "q1",
         g1: {
             scored: Array(...scored),
             canClick: Array(...clickable),
@@ -67,21 +90,40 @@ const quixxMixxColors = () => {
 }
 
 const sequential = () => {
-    const colors = ['red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu']
+    const colors = ['red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', ]
     const state = quixx()
-    state.g1.color = colors
-    state.g2.color = colors
-    state.g3.color = colors
-    state.g4.color = colors
+    state.g1.color = colors.concat(["blu"])
+    state.g2.color = colors.concat(["gre"])
+    state.g3.color = colors.concat(["yel"])
+    state.g4.color = colors.concat(["red"])
     return state
 }
 
 const randomNum = () => {
     const state = quixx()
-    state.g1.nums = shuffled()
-    state.g2.nums = shuffled()
-    state.g3.nums = shuffled()
-    state.g4.nums = shuffled()
+    state.g1.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
+    state.g2.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
+    state.g3.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
+    state.g4.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
+    return state
+}
+
+const randomCol = () => {
+    const state = quixx()
+    const mixedColors = mixColors()
+    state.g1.color = mixedColors[0]
+    state.g2.color = mixedColors[1]
+    state.g3.color = mixedColors[2]
+    state.g4.color = mixedColors[3]
+    return state
+}
+const randomNumCol = () => {
+    let state = randomNum()
+    const mixedColors = mixColors()
+    state.g1.color = mixedColors[0]
+    state.g2.color = mixedColors[1]
+    state.g3.color = mixedColors[2]
+    state.g4.color = mixedColors[3]
     return state
 }
 
@@ -91,16 +133,35 @@ const lessSkips = () => {
     return state
 }
 
-const GameBoards = {
-    quixx,
-    quixxMixxNumbers,
-    quixxMixxColors,
-    sequential,
-    randomNum,
-    lessSkips,
+const lookup = {
+    1: quixx,
+    2: quixxMixxNumbers,
+    3: quixxMixxColors,
+    4: randomNum,
+    5: randomCol,
+    6: randomNumCol,
+    7: lessSkips,
+    8: sequential
+}
 
+const scores = {
+    blu: 0,
+    gre: 0,
+    yel: 0,
+    red: 0,
+    skips: 0,
+    total: 0
+}
+
+const groups = ["g1", "g2", "g3", "g4"]
+
+const Boards = {
+    quixx,
+    lookup,
+    groups,
+    scores,
     clickable,
     scored
 }
 
-export default GameBoards
+export default Boards

@@ -14,18 +14,21 @@ const OptionsModal = function (props) {
 
                 <div className={"modal-body"}>
                     <div className={"modal-body-divider"}>Original</div>
-                    <button className={buttonClass} onClick={() => {props.setGameBoard("q1"); props.toggleModal()}}>Quixx</button>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(1); props.toggleModal()}}>Quixx</button>
                     <div className={"modal-body-divider"}>Quixx Mixx Expansion Pack</div>
-                    <button className={buttonClass} onClick={() => {props.setGameBoard("q2"); props.toggleModal()}}>Quixx Mixx Numbers</button>
-                    <button className={buttonClass} onClick={() => {props.setGameBoard("q3"); props.toggleModal()}}>Quixx Mixx Colors</button>
-                    <div className={"modal-body-divider"}>Extra Games</div>
-                    <button className={buttonClass} onClick={() => {props.setGameBoard("q4"); props.toggleModal()}}>Sequential Colors</button>
-                    <button className={buttonClass} onClick={() => {props.setGameBoard("q5"); props.toggleModal()}}>Random Numbers</button>
-                    <button className={buttonClass} onClick={() => {props.setGameBoard("q6"); props.toggleModal()}}>Quixx - 2 Skips</button>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(2); props.toggleModal()}}>Quixx Mixx Numbers</button>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(3); props.toggleModal()}}>Quixx Mixx Colors</button>
+                    <div className={"modal-body-divider"}>Random Boards</div>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(4); props.toggleModal()}}>Random Numbers</button>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(5); props.toggleModal()}}>Random Colors</button>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(6); props.toggleModal()}}>Random Numbers and Colors</button>
+                    <div className={"modal-body-divider"}>More Games</div>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(7); props.toggleModal()}}>Quixx - 2 Skips</button>
+                    <button className={buttonClass} onClick={() => {props.changeBoards(8); props.toggleModal()}}>Sequential Colors</button>
                 </div>
 
                 <div className={"modal-footer"}>
-                    <button className={"modal-btn"} onClick={() => {props.toggleModal()}}>Close Menu</button>
+                    <button className={"modal-btn"} onClick={() => {props.toggleModal()}}>Close</button>
                 </div>
             </div>
         </div>

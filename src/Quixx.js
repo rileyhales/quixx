@@ -1,7 +1,7 @@
 import React, {useState, useEffect, lazy} from "react"
 
 import LoadingScreen from "./LoadingScreen"
-import GameBoards from "./GameBoards";
+import Boards from "./Boards";
 
 import "./Quixx.css"
 import "./quixx-colors.css"
@@ -11,57 +11,41 @@ const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
 const OptionsModal = lazy(() => import("./OptionsModal"))
 
-const scoresTemplate = {
-    blu: 0,
-    gre: 0,
-    yel: 0,
-    red: 0,
-    skips: 0,
-    total: 0
-}
-
-const GROUPLIST = ["g1", "g2", "g3", "g4"]
-const BOARDS = {
-    q1: GameBoards.quixx,
-    q2: GameBoards.quixxMixxNumbers,
-    q3: GameBoards.quixxMixxColors,
-    q4: GameBoards.sequential,
-    q5: GameBoards.randomNum,
-    q6: GameBoards.lessSkips
-}
-
 const Quixx = () => {
-    const [gameScores, setGameScores] = useState(GameBoards.quixx())
-    const [gameBoard, setGameBoard] = useState("q1")
-
-    const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
+    const [gameState, setGameState] = useState(Boards.quixx())
+    const [scores, setScores] = useState(JSON.parse(JSON.stringify(Boards.scores)))
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
     const restart = () => {
-        setGameScores(currentState => {
+        setGameState(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState))
-            GROUPLIST.forEach(group => {
-                newState[group].scored = Array(...GameBoards.scored)
-                newState[group].canClick = Array(...GameBoards.clickable)
+            Boards.groups.forEach(group => {
+                newState.undoState = null
+                newState.redoState = null
+                newState[group].scored = Array(...Boards.scored)
+                newState[group].canClick = Array(...Boards.clickable)
+                newState.skips = newState.skips.map(() => false)
             })
             return newState
         })
     }
-    const changeBoards = () => {
-        const newBoard = BOARDS[gameBoard]()
-        setGameScores(currentState => {
+    const changeBoards = (boardID) => {
+        const newBoard = Boards.lookup[boardID]()
+        setGameState(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState))
-            GROUPLIST.forEach(group => {
+            Boards.groups.forEach(group => {
+                newState.undoState = null
+                newState.redoState = null
                 newState[group].color = newBoard[group].color
                 newState[group].nums = newBoard[group].nums
+                newState.skips = newBoard.skips
             })
-            newState.board = gameBoard
             return newState
         })
     }
     const skip = (index) => {
-        setGameScores((lastState) => {
+        setGameState((lastState) => {
             let newState = JSON.parse(JSON.stringify(lastState))
             newState.undoState = JSON.parse(JSON.stringify(lastState))
             newState.skips[index] = !newState.skips[index]
@@ -69,8 +53,8 @@ const Quixx = () => {
         })
     }
     const redo = () => {
-        if (gameScores.redoState === null) return
-        setGameScores(currentState => {
+        if (gameState.redoState === null) return
+        setGameState(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState))
             // cache a clone of the current state as the state to "undo"
             newState.redoState.undoState = JSON.parse(JSON.stringify(currentState))
@@ -78,8 +62,8 @@ const Quixx = () => {
         })
     }
     const undo = () => {
-        if (gameScores.undoState === null) return
-        setGameScores(currentState => {
+        if (gameState.undoState === null) return
+        setGameState(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState.undoState))
             newState.redoState = JSON.parse(JSON.stringify(currentState))
             return newState
@@ -95,7 +79,7 @@ const Quixx = () => {
         }
     }
     const scoreButton = function (btnGroup, btnNumber) {
-        setGameScores((currentState) => {
+        setGameState((currentState) => {
             let newState = JSON.parse(JSON.stringify(currentState))
             newState.undoState = JSON.parse(JSON.stringify(currentState))
             newState.redoState = null
@@ -138,20 +122,16 @@ const Quixx = () => {
 
     useEffect(() => {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem("quixx-react-state"))
-        if (stateFromLocalStorage !== null) {
-            setGameScores(stateFromLocalStorage)
-            setGameBoard(stateFromLocalStorage.board)
-        }
+        if (stateFromLocalStorage !== null) setGameState(stateFromLocalStorage)
     }, [])
 
     useEffect(() => {
-        console.log("state changes")
         setScores(() => {
-            const scoreG1 = computeScore(gameScores.g1.scored)
-            const scoreG2 = computeScore(gameScores.g2.scored)
-            const scoreG3 = computeScore(gameScores.g3.scored)
-            const scoreG4 = computeScore(gameScores.g4.scored)
-            const scoreSkips = gameScores.skips.filter(Boolean).length * -5
+            const scoreG1 = computeScore(gameState.g1.scored)
+            const scoreG2 = computeScore(gameState.g2.scored)
+            const scoreG3 = computeScore(gameState.g3.scored)
+            const scoreG4 = computeScore(gameState.g4.scored)
+            const scoreSkips = gameState.skips.filter(Boolean).length * -5
             return {
                 blu: scoreG1,
                 gre: scoreG2,
@@ -161,14 +141,8 @@ const Quixx = () => {
                 total: scoreG1 + scoreG2 + scoreG3 + scoreG4 + scoreSkips
             }
         })
-        cacheState(gameScores)
-        console.log("cached state")
-    }, [gameScores,])
-
-    useEffect(() => {
-        console.log("changing boards")
-        changeBoards()
-    }, [gameBoard])
+        cacheState(gameState)
+    }, [gameState,])
 
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
@@ -179,12 +153,12 @@ const Quixx = () => {
                           isFullScreen={isFullScreen}
                           goFullscreen={goFullscreen}
                           toggleModal={toggleModal}
-                          state={gameScores}/>
+                          state={gameState}/>
                 <div className={"scores"}>
-                    {GROUPLIST.map((group, index) => <ScoreGroup key={index} state={gameScores[group]} group={group} click={scoreButton}/>)}
-                    <MenuGroup state={gameScores} click={skip} scores={scores}/>
+                    {Boards.groups.map((group, idx) => <ScoreGroup key={idx} state={gameState[group]} group={group} click={scoreButton}/>)}
+                    <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
-                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} setGameBoard={setGameBoard}/>
+                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} changeBoards={changeBoards}/>
             </div>
         </React.Suspense>
     )
