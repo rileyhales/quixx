@@ -1,7 +1,7 @@
 # Quixx Score Card
 A web app to help you play the dice game Quixx.
 
-Play this app here: https://rileyhales.github.io/quixx
+Play this app here: https://rileyhales.com/quixx
 
 Rules for Quixx are here: https://www.ultraboardgames.com/qwixx/game-rules.php
 
