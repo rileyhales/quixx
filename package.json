@@ -1,8 +1,8 @@
 {
   "name": "quixx-react",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "private": true,
-  "homepage": "/quixx",
+  "homepage": "https://quixx.rileyhales.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",

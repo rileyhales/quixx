@@ -1,7 +1,7 @@
 import React, {useState, useEffect, lazy} from "react"
 
 import LoadingScreen from "./LoadingScreen"
-import GameStates from "./GameStates";
+import Boards from "./Boards";
 
 import "./Quixx.css"
 import "./quixx-colors.css"
@@ -11,47 +11,38 @@ const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
 const OptionsModal = lazy(() => import("./OptionsModal"))
 
-const scoresTemplate = {
-    blu: 0,
-    gre: 0,
-    yel: 0,
-    red: 0,
-    skips: 0,
-    total: 0
-}
-
-const groupList = ["g1", "g2", "g3", "g4"]
-
 const Quixx = () => {
-    const [gameState, setGameState] = useState(GameStates.quixx())
-    const [gameBoard, setGameBoard] = useState('Quixx')
-    const [scores, setScores] = useState(JSON.parse(JSON.stringify(scoresTemplate)))
+    const [gameState, setGameState] = useState(Boards.quixx())
+    const [scores, setScores] = useState(JSON.parse(JSON.stringify(Boards.scores)))
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
     const restart = () => {
-        switch (gameBoard) {
-            case "q1":
-                setGameState(GameStates.quixx())
-                break
-            case "q2":
-                setGameState(GameStates.quixxMixxNumbers())
-                break
-            case "q3":
-                setGameState(GameStates.quixxMixxColors())
-                break
-            case "q4":
-                setGameState(GameStates.sequential())
-                break
-            case "q5":
-                setGameState(GameStates.randomNum())
-                break
-            case "q6":
-                setGameState(GameStates.lessSkips())
-                break
-            default:
-                setGameState(GameStates.quixx())
-        }
+        setGameState(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            Boards.groups.forEach(group => {
+                newState.undoState = null
+                newState.redoState = null
+                newState[group].scored = Array(...Boards.scored)
+                newState[group].canClick = Array(...Boards.clickable)
+                newState.skips = newState.skips.map(() => false)
+            })
+            return newState
+        })
+    }
+    const changeBoards = (boardID) => {
+        const newBoard = Boards.lookup[boardID]()
+        setGameState(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            Boards.groups.forEach(group => {
+                newState.undoState = null
+                newState.redoState = null
+                newState[group].color = newBoard[group].color
+                newState[group].nums = newBoard[group].nums
+                newState.skips = newBoard.skips
+            })
+            return newState
+        })
     }
     const skip = (index) => {
         setGameState((lastState) => {
@@ -87,23 +78,33 @@ const Quixx = () => {
             setIsFullScreen(true)
         }
     }
-    const scoreButton = function (targetColor, targetNumber) {
+    const scoreButton = function (btnGroup, btnNumber) {
         setGameState((currentState) => {
             let newState = JSON.parse(JSON.stringify(currentState))
             newState.undoState = JSON.parse(JSON.stringify(currentState))
             newState.redoState = null
             // figure out which index in the scoring/clickable arrays we're on
-            const targetIndex = newState[targetColor].nums.indexOf(targetNumber)
+            const btnIndex = newState[btnGroup].nums.indexOf(btnNumber)
             // toggle the scored status of the button
-            newState[targetColor].scored[targetIndex] = !(newState[targetColor].scored[targetIndex])
+            newState[btnGroup].scored[btnIndex] = !(newState[btnGroup].scored[btnIndex])
             // figure out what buttons should be clickable
-            const indexOfHighestScoredBox = newState[targetColor].scored.lastIndexOf(true)
+            const indexOfHighestScoredBox = newState[btnGroup].scored.lastIndexOf(true)
             // buttons lower than the one pressed are disabled
-            newState[targetColor].canClick = newState[targetColor].canClick.map((element, index) => {
+            newState[btnGroup].canClick = newState[btnGroup].canClick.map((element, index) => {
                 return !(index < indexOfHighestScoredBox)
             })
             // can only click 11th button (12 or 2) if the number of other buttons scored is 5 or more
-            newState[targetColor].canClick[10] = newState[targetColor].scored.filter(Boolean).length >= 5 && !newState[targetColor].scored[11];
+            newState[btnGroup].canClick[10] = newState[btnGroup].scored.filter(Boolean).length >= 5 && !newState[btnGroup].scored[11];
+
+            // End of game logic when a lock button is pressed
+            // if (btnIndex === 11) {
+            //     const numLocks = groupList.reduce((sum, group) => {
+            //         return newState[group].scored[btnIndex] ? sum + 1 : sum
+            //     }, 0)
+            //     if (numLocks === 1 && newState[btnGroup].scored[btnIndex]) alert(`Remove the ${newState[btnGroup].color[btnIndex]} Dice`)
+            //     if (numLocks === 2) alert("Game over")
+            // }
+
             return newState
         })
     }
@@ -143,19 +144,21 @@ const Quixx = () => {
         cacheState(gameState)
     }, [gameState,])
 
-    useEffect(() => {
-        restart()
-    }, [gameBoard])
-
     return (
         <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
             <div className={"app-container"}>
-                <TitleBar restart={restart} undo={undo} redo={redo} isFullScreen={isFullScreen} goFullscreen={goFullscreen} toggleModal={toggleModal} state={gameState}/>
+                <TitleBar restart={restart}
+                          undo={undo}
+                          redo={redo}
+                          isFullScreen={isFullScreen}
+                          goFullscreen={goFullscreen}
+                          toggleModal={toggleModal}
+                          state={gameState}/>
                 <div className={"scores"}>
-                    {groupList.map((color, index) => <ScoreGroup key={index} state={gameState[color]} color={color} click={scoreButton}/>)}
+                    {Boards.groups.map((group, idx) => <ScoreGroup key={idx} state={gameState[group]} group={group} click={scoreButton}/>)}
                     <MenuGroup state={gameState} click={skip} scores={scores}/>
                 </div>
-                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} setGameBoard={setGameBoard}/>
+                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} changeBoards={changeBoards}/>
             </div>
         </React.Suspense>
     )
