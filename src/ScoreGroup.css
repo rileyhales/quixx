@@ -20,6 +20,7 @@
     align-items: center;
     justify-content: center;
     transition: all .4s ease-out;
+    background-color: lightgrey;
 }
 .score-btn:disabled {
     transition: all .4s ease-out;

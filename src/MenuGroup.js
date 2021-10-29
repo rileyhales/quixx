@@ -13,10 +13,7 @@ const MenuGroup = (props) => {
                            checked={value}
                            onChange={() => props.click(index)}
                            aria-label={"Skip turn marker"}/>
-                    <span className={`skip-style-span btn-sizes`}>
-                        X
-                        {/*{index === 0 ? "S" : index === 1 ? "K" : index === 2 ? "I" : "P"}*/}
-                    </span>
+                    <span className={`skip-style-span btn-sizes`}>X</span>
                 </label>
 
             )
