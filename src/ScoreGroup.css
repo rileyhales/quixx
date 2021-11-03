@@ -20,13 +20,15 @@
     align-items: center;
     justify-content: center;
     transition: all .4s ease-out;
-    background-color: lightgrey;
+    background-color: #eeeeee;
+    border-radius: 3px;
+    border: none;
 }
 .score-btn:disabled {
     transition: all .4s ease-out;
 }
 .scored {
-    background-color: lawngreen;
+    background-color: #75f100;
     transition: all .4s ease-out;
 }
 .locked.scored {

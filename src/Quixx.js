@@ -17,12 +17,16 @@ const Quixx = () => {
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
+    const localStorageItem = "quixx-state"
+
     const restart = () => {
+        if (!window.confirm("Are you sure you want to reset your board?")) return
         setGameState(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState))
             Boards.groups.forEach(group => {
                 newState.undoState = null
                 newState.redoState = null
+                newState[group].scored = Array(...Boards.scored)
                 newState[group].scored = Array(...Boards.scored)
                 newState[group].canClick = Array(...Boards.clickable)
                 newState.skips = newState.skips.map(() => false)
@@ -109,7 +113,7 @@ const Quixx = () => {
         })
     }
     const cacheState = (stateToCache) => {
-        localStorage.setItem("quixx-react-state", JSON.stringify(stateToCache))
+        localStorage.setItem(localStorageItem, JSON.stringify(stateToCache))
     }
     const computeScore = (scoredList) => {
         // computes score for a list of boolean scored/true and notScored/false values
@@ -121,7 +125,7 @@ const Quixx = () => {
     const toggleModal = () => {setModalVisible(prevState => {return !prevState})}
 
     useEffect(() => {
-        const stateFromLocalStorage = JSON.parse(localStorage.getItem("quixx-react-state"))
+        const stateFromLocalStorage = JSON.parse(localStorage.getItem(localStorageItem))
         if (stateFromLocalStorage !== null) setGameState(stateFromLocalStorage)
     }, [])
 

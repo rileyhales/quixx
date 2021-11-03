@@ -18,7 +18,8 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-family: Sans-Serif;
+    font-family: sans-serif;
+    border-radius: 2px;
 }
 .skip-label .skip-style-span {
     background-color: white;

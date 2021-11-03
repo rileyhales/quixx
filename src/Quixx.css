@@ -15,7 +15,7 @@ body, #root, .app-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 675px;
+    max-width: 625px;
 }
 
 .btn-sizes {
