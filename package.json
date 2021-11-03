@@ -1,6 +1,6 @@
 {
   "name": "quixx-react",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "private": true,
   "homepage": "https://quixx.rileyhales.com",
   "dependencies": {
