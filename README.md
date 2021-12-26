@@ -1,9 +1,11 @@
 # Quixx Score Card
-A web app to help you play the dice game Quixx.
+A React web app to help you play the dice game Quixx.
 
-Play this app here: https://rileyhales.com/quixx
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7cd9a5e3-af1e-4140-a4e3-a2b48f6e180e/deploy-status)](https://app.netlify.com/sites/rileyhalescom-quixx/deploys)
 
-Rules for Quixx are here: https://www.ultraboardgames.com/qwixx/game-rules.php
+Play this app here: https://quixx.rileyhales.com
+
+Full rules for Quixx: https://www.ultraboardgames.com/qwixx/game-rules.php
 
 Features:
 - Full score card interface
@@ -35,11 +37,3 @@ Guide:
 - You can use the redo button only after using the undo button and before you click a new scoring button
 - Continue scoring until you've marked the lock in 2 columns
 - Use the restart button when you're ready to begin again
-
-# Development Notes
-- App is configured to serve to `/quixx`
-
-```bash
-npm install
-npm start
-```
