@@ -45,6 +45,8 @@ const Quixx = () => {
                 newState[group].color = newBoard[group].color
                 newState[group].nums = newBoard[group].nums
                 newState.skips = newBoard.skips
+                newState.trixx = newBoard.id === 4
+                newState.id = newBoard.id
             })
             return newState
         })
@@ -83,7 +85,7 @@ const Quixx = () => {
             setIsFullScreen(true)
         }
     }
-    const scoreButton = function (btnGroup, btnNumber) {
+    const scoreButton = (btnGroup, btnNumber) => {
         setGameState((currentState) => {
             let newState = JSON.parse(JSON.stringify(currentState))
             newState.undoState = JSON.parse(JSON.stringify(currentState))
@@ -101,21 +103,10 @@ const Quixx = () => {
             // can only click 11th button (12 or 2) if the number of other buttons scored is 5 or more
             newState[btnGroup].canClick[10] = newState[btnGroup].scored.filter(Boolean).length >= 5 && !newState[btnGroup].scored[11];
 
-            // End of game logic when a lock button is pressed
-            // if (btnIndex === 11) {
-            //     const numLocks = groupList.reduce((sum, group) => {
-            //         return newState[group].scored[btnIndex] ? sum + 1 : sum
-            //     }, 0)
-            //     if (numLocks === 1 && newState[btnGroup].scored[btnIndex]) alert(`Remove the ${newState[btnGroup].color[btnIndex]} Dice`)
-            //     if (numLocks === 2) alert("Game over")
-            // }
-
             return newState
         })
     }
-    const cacheState = (stateToCache) => {
-        localStorage.setItem(localStorageItem, JSON.stringify(stateToCache))
-    }
+    const cacheState = stateToCache => localStorage.setItem(localStorageItem, JSON.stringify(stateToCache))
     const computeScore = (scoredList) => {
         // computes score for a list of boolean scored/true and notScored/false values
         let count = scoredList.filter(Boolean).length
@@ -137,7 +128,7 @@ const Quixx = () => {
             const scoreG2 = computeScore(gameState.g2.scored)
             const scoreG3 = computeScore(gameState.g3.scored)
             const scoreG4 = computeScore(gameState.g4.scored)
-            const scoreSkips = gameState.skips.filter(Boolean).length * -5
+            const scoreSkips = gameState.skips.filter(Boolean).length * (gameState.trixx ? -2 : -5)
             return {
                 blu: scoreG1,
                 gre: scoreG2,
@@ -168,22 +159,28 @@ const Quixx = () => {
               <Modal visible={boardModalVisible} setVisible={setBoardModalVisible} title={"Change Boards"}>
                   <>
                       <div className={"modal-body-divider"}>Original</div>
-                      <button className={"board-btn"} onClick={() => {changeBoards(1); setBoardModalVisible(false)}}>Quixx</button>
+                      <button className={`board-btn ${gameState.id === 1 ? "active-board" : ""}`} onClick={() => {changeBoards(1); setBoardModalVisible(false)}}>Quixx</button>
                       <div className={"modal-body-divider"}>Quixx Mixx Expansion Pack</div>
-                      <button className={"board-btn"} onClick={() => {changeBoards(2); setBoardModalVisible(false)}}>Quixx Mixx Numbers</button>
-                      <button className={"board-btn"} onClick={() => {changeBoards(3); setBoardModalVisible(false)}}>Quixx Mixx Colors</button>
+                      <button className={`board-btn ${gameState.id === 2 ? "active-board" : ""}`} onClick={() => {changeBoards(2); setBoardModalVisible(false)}}>Quixx Mixx Numbers</button>
+                      <button className={`board-btn ${gameState.id === 3 ? "active-board" : ""}`} onClick={() => {changeBoards(3); setBoardModalVisible(false)}}>Quixx Mixx Colors</button>
                       <div className={"modal-body-divider"}>Quixx Trixx - Party Mode</div>
-                      <button className={"board-btn"} onClick={() => {changeBoards(9); setBoardModalVisible(false)}}>Quixx Trixx</button>
-                      <button className={"board-btn"} onClick={() => {changeBoards(7); setBoardModalVisible(false)}}>Quixx - 2 Skips</button>
-                      <button className={"board-btn"} onClick={() => {changeBoards(8); setBoardModalVisible(false)}}>Sequential Colors</button>
+                      <button className={`board-btn ${gameState.id === 4 ? "active-board" : ""}`} onClick={() => {changeBoards(4); setBoardModalVisible(false)}}>Quixx Trixx</button>
+                      <button className={`board-btn ${gameState.id === 5 ? "active-board" : ""}`} onClick={() => {changeBoards(5); setBoardModalVisible(false)}}>Quixx - 2 Skips</button>
+                      <button className={`board-btn ${gameState.id === 6 ? "active-board" : ""}`} onClick={() => {changeBoards(6); setBoardModalVisible(false)}}>Sequential Colors</button>
                       <div className={"modal-body-divider"}>Random Boards</div>
-                      <button className={"board-btn"} onClick={() => {changeBoards(4); setBoardModalVisible(false)}}>Random Numbers</button>
-                      <button className={"board-btn"} onClick={() => {changeBoards(5); setBoardModalVisible(false)}}>Random Colors</button>
-                      <button className={"board-btn"} onClick={() => {changeBoards(6); setBoardModalVisible(false)}}>Random Numbers and Colors</button>
+                      <button className={`board-btn ${gameState.id === 7 ? "active-board" : ""}`} onClick={() => {changeBoards(7); setBoardModalVisible(false)}}>Random Numbers</button>
+                      <button className={`board-btn ${gameState.id === 8 ? "active-board" : ""}`} onClick={() => {changeBoards(8); setBoardModalVisible(false)}}>Random Colors</button>
+                      <button className={`board-btn ${gameState.id === 9 ? "active-board" : ""}`} onClick={() => {changeBoards(9); setBoardModalVisible(false)}}>Random Numbers and Colors</button>
                   </>
               </Modal>
               <Modal visible={helpModalVisible} setVisible={setHelpModalVisible} title={"Help"}>
-
+                  <>
+                      <div className={"modal-body-divider"}>Powers</div>
+                      <div>Time Travel: Score a number you previously skipped</div>
+                      <div>Re-roll: Re-roll any number of die, but only 1 time</div>
+                      <div>Color Blind: Score with any two die on any color group</div>
+                      <div>Skip: Skip your turn</div>
+                  </>
               </Modal>
           </div>
       </React.Suspense>

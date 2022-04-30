@@ -68,6 +68,7 @@ const quixx = () => {
             color: Array(buttonCount).fill('red')
         },
         skips: Array(numSkips).fill(false),
+        id: 1
     }
 }
 
@@ -77,6 +78,7 @@ const quixxMixxNumbers = () => {
     state.g2.nums = [8, 2, 10, 12, 6, 9, 7, 4, 5, 11, 3, "lock"]
     state.g3.nums = [9, 12, 4, 6, 7, 2, 5, 8, 11, 3, 10, "lock"]
     state.g4.nums = [10, 6, 2, 8, 3, 4, 12, 5, 9, 7, 11, "lock"]
+    state.id = 2
     return state
 }
 
@@ -86,6 +88,21 @@ const quixxMixxColors = () => {
     state.g2.color = ['blu', 'blu', 'blu', 'yel', 'yel', 'yel', 'red', 'red', 'red', 'gre', 'gre', 'gre']
     state.g3.color = ['red', 'red', 'gre', 'gre', 'gre', 'gre', 'blu', 'blu', 'yel', 'yel', 'yel', 'yel']
     state.g4.color = ['yel', 'yel', 'yel', 'blu', 'blu', 'blu', 'gre', 'gre', 'gre', 'red', 'red', 'red']
+    state.id = 3
+    return state
+}
+
+const trixx = () => {
+    const state = quixx()
+    state.trixx = true
+    state.id = 4
+    return state
+}
+
+const lessSkips = () => {
+    const state = quixx()
+    state.skips = Array(2).fill(false)
+    state.id = 5
     return state
 }
 
@@ -96,6 +113,7 @@ const sequential = () => {
     state.g2.color = colors.concat(["gre"])
     state.g3.color = colors.concat(["yel"])
     state.g4.color = colors.concat(["red"])
+    state.id = 6
     return state
 }
 
@@ -105,6 +123,7 @@ const randomNum = () => {
     state.g2.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
     state.g3.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
     state.g4.nums = shuffle(allNums.slice(0), 15).concat(["lock"])
+    state.id = 7
     return state
 }
 
@@ -115,6 +134,7 @@ const randomCol = () => {
     state.g2.color = mixedColors[1]
     state.g3.color = mixedColors[2]
     state.g4.color = mixedColors[3]
+    state.id = 8
     return state
 }
 const randomNumCol = () => {
@@ -124,16 +144,7 @@ const randomNumCol = () => {
     state.g2.color = mixedColors[1]
     state.g3.color = mixedColors[2]
     state.g4.color = mixedColors[3]
-    return state
-}
-
-const trixx = () => {
-    return quixx()
-}
-
-const lessSkips = () => {
-    const state = quixx()
-    state.skips = Array(2).fill(false)
+    state.id = 9
     return state
 }
 
@@ -141,12 +152,12 @@ const lookup = {
     1: quixx,
     2: quixxMixxNumbers,
     3: quixxMixxColors,
-    4: randomNum,
-    5: randomCol,
-    6: randomNumCol,
-    7: lessSkips,
-    8: sequential,
-    9: trixx
+    4: trixx,
+    5: lessSkips,
+    6: sequential,
+    7: randomNum,
+    8: randomCol,
+    9: randomNumCol
 }
 
 const scores = {

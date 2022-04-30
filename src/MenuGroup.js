@@ -2,41 +2,50 @@ import React from "react"
 
 import "./MenuGroup.css"
 
+import alarm from "./icons/alarm.svg"
+import dice from "./icons/dice-6.svg"
+import glasses from "./icons/eyeglasses.svg"
+import skip from "./icons/skip-end.svg"
 
-const MenuGroup = (props) => {
-    const skipCheckboxes = props.state.skips.map(
+export default function MenuGroup({state, scores, click}) {
+    const trixxIcons = [alarm, dice, glasses, skip]
+    const skipCheckboxes = state.skips.map(
       (value, index) => {
           return (
             <label key={index} className={"btn-sizes skip-label"}>
                 <input className={"btn-sizes skip-input"}
                        type={"checkbox"}
                        checked={value}
-                       onChange={() => props.click(index)}
+                       onChange={() => click(index)}
                        aria-label={"Skip turn marker"}/>
-                <span className={`skip-style-span btn-sizes`}>X</span>
+                <span className={`skip-style-span btn-sizes`}>
+                    {state.trixx ? <img src={trixxIcons[index]} alt={"powerup icon"}></img> : "X"}
+                </span>
             </label>
           )
       })
-    const scoreBoxes = Object.keys(props.scores).map((color, index) => {
+    const scoreBoxes = Object.keys(scores).map((color, index) => {
         return (
           <div key={index} className={`score-total btn-sizes bg-quixx-${color}-score`}>
-              {props.scores[color]}
+              {scores[color]}
           </div>
         )
     })
     return (
       <div className={"score-group menu-group bg-quixx-grey"}>
-          <div className={"menu-label"}>Skip</div>
+          <div className={"menu-label"}>{state.trixx ? "Powers" : "Skip"}</div>
           {skipCheckboxes}
           <hr/>
           <div className={"menu-label"}>Score</div>
           {scoreBoxes}
           <hr/>
-          <div><a href={"https://rileyhales.com"}>&copy;RCH</a></div>
+          <div><a href={"https://hales.app"}>&copy;RCH</a></div>
           <div>{process.env.REACT_APP_VERSION}</div>
       </div>
     )
 };
 
-export default MenuGroup
+MenuGroup.defaultProps = {
+    trixx: true
+}
 
