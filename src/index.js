@@ -1,6 +1,12 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import {createRoot} from 'react-dom/client'
 
 import Quixx from "./Quixx"
 
-ReactDOM.render(<React.StrictMode><Quixx/></React.StrictMode>, document.getElementById("root"))
+
+createRoot(document.getElementById('root'))
+  .render(
+    <React.StrictMode>
+        <Quixx/>
+    </React.StrictMode>,
+  )

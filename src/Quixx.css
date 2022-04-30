@@ -17,7 +17,6 @@ body, #root, .app-container {
     width: 100%;
     max-width: 625px;
 }
-
 .btn-sizes {
     width: 40px;
     height: 40px;
@@ -26,6 +25,11 @@ body, #root, .app-container {
     font-size: 35px;
     margin: 4px;
     border-radius: 3px;
+}
+.board-btn {
+    width: 90%;
+    padding: .5em 0;
+    margin: .5em 0;
 }
 @media (max-height: 665px) {
     .btn-sizes {

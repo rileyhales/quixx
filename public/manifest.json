@@ -19,6 +19,14 @@
       "type": "image/svg"
     },
     {
+      "src": "help.svg",
+      "type": "image/svg"
+    },
+    {
+      "src": "fullscreen.svg",
+      "type": "image/svg"
+    },
+    {
       "src": "minimize.svg",
       "type": "image/svg"
     }

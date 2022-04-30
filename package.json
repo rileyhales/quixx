@@ -2,12 +2,11 @@
   "name": "quixx-react",
   "version": "1.7.0",
   "private": true,
-  "homepage": "https://quixx.rileyhales.com",
+  "homepage": "https://quixx.hales.app",
   "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.1"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -9,13 +9,14 @@ import "./quixx-colors.css"
 const TitleBar = lazy(() => import("./TitleBar"))
 const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
-const OptionsModal = lazy(() => import("./OptionsModal"))
+const Modal = lazy(() => import("./Modal"))
 
 const Quixx = () => {
     const [gameState, setGameState] = useState(Boards.quixx())
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(Boards.scores)))
     const [isFullScreen, setIsFullScreen] = useState(false)
-    const [modalVisible, setModalVisible] = useState(false)
+    const [boardModalVisible, setBoardModalVisible] = useState(false)
+    const [helpModalVisible, setHelpModalVisible] = useState(false)
 
     const localStorageItem = "quixx-state"
 
@@ -122,7 +123,8 @@ const Quixx = () => {
         if (!scoredList[10] && scoredList[11]) count -= 1
         return count * (count + 1) / 2
     }
-    const toggleModal = () => {setModalVisible(prevState => {return !prevState})}
+    const showBoardMenu = () => setBoardModalVisible(prevState => !prevState)
+    const showHelpModal = () => setHelpModalVisible(prevState => !prevState)
 
     useEffect(() => {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem(localStorageItem))
@@ -149,22 +151,42 @@ const Quixx = () => {
     }, [gameState,])
 
     return (
-        <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
-            <div className={"app-container"}>
-                <TitleBar restart={restart}
-                          undo={undo}
-                          redo={redo}
-                          isFullScreen={isFullScreen}
-                          goFullscreen={goFullscreen}
-                          toggleModal={toggleModal}
-                          state={gameState}/>
-                <div className={"scores"}>
-                    {Boards.groups.map((group, idx) => <ScoreGroup key={idx} state={gameState[group]} group={group} click={scoreButton}/>)}
-                    <MenuGroup state={gameState} click={skip} scores={scores}/>
-                </div>
-                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} changeBoards={changeBoards}/>
-            </div>
-        </React.Suspense>
+      <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
+          <div className={"app-container"}>
+              <TitleBar restart={restart}
+                        undo={undo}
+                        redo={redo}
+                        isFullScreen={isFullScreen}
+                        goFullscreen={goFullscreen}
+                        showBoardMenu={showBoardMenu}
+                        showHelpModal={showHelpModal}
+                        state={gameState}/>
+              <div className={"scores"}>
+                  {Boards.groups.map((group, idx) => <ScoreGroup key={idx} state={gameState[group]} group={group} click={scoreButton}/>)}
+                  <MenuGroup state={gameState} click={skip} scores={scores}/>
+              </div>
+              <Modal visible={boardModalVisible} setVisible={setBoardModalVisible} title={"Change Boards"}>
+                  <>
+                      <div className={"modal-body-divider"}>Original</div>
+                      <button className={"board-btn"} onClick={() => {changeBoards(1); setBoardModalVisible(false)}}>Quixx</button>
+                      <div className={"modal-body-divider"}>Quixx Mixx Expansion Pack</div>
+                      <button className={"board-btn"} onClick={() => {changeBoards(2); setBoardModalVisible(false)}}>Quixx Mixx Numbers</button>
+                      <button className={"board-btn"} onClick={() => {changeBoards(3); setBoardModalVisible(false)}}>Quixx Mixx Colors</button>
+                      <div className={"modal-body-divider"}>Quixx Trixx - Party Mode</div>
+                      <button className={"board-btn"} onClick={() => {changeBoards(9); setBoardModalVisible(false)}}>Quixx Trixx</button>
+                      <button className={"board-btn"} onClick={() => {changeBoards(7); setBoardModalVisible(false)}}>Quixx - 2 Skips</button>
+                      <button className={"board-btn"} onClick={() => {changeBoards(8); setBoardModalVisible(false)}}>Sequential Colors</button>
+                      <div className={"modal-body-divider"}>Random Boards</div>
+                      <button className={"board-btn"} onClick={() => {changeBoards(4); setBoardModalVisible(false)}}>Random Numbers</button>
+                      <button className={"board-btn"} onClick={() => {changeBoards(5); setBoardModalVisible(false)}}>Random Colors</button>
+                      <button className={"board-btn"} onClick={() => {changeBoards(6); setBoardModalVisible(false)}}>Random Numbers and Colors</button>
+                  </>
+              </Modal>
+              <Modal visible={helpModalVisible} setVisible={setHelpModalVisible} title={"Help"}>
+
+              </Modal>
+          </div>
+      </React.Suspense>
     )
 }
 

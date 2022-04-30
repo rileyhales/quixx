@@ -127,6 +127,10 @@ const randomNumCol = () => {
     return state
 }
 
+const trixx = () => {
+    return quixx()
+}
+
 const lessSkips = () => {
     const state = quixx()
     state.skips = Array(2).fill(false)
@@ -141,7 +145,8 @@ const lookup = {
     5: randomCol,
     6: randomNumCol,
     7: lessSkips,
-    8: sequential
+    8: sequential,
+    9: trixx
 }
 
 const scores = {
