@@ -21,13 +21,16 @@
     font-family: sans-serif;
     border-radius: 2px;
 }
+.skip-style-span > img {
+    width: 75%;
+}
 .skip-label .skip-style-span {
     background-color: white;
     transition: all 0.4s ease-out;
 }
 .skip-label input:checked ~ .skip-style-span {
     transition: all 0.4s ease-out;
-    background-color: #fd4545;
+    background-color: #c36aff;
 }
 .score-total {
     display: flex;

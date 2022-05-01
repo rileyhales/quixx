@@ -9,13 +9,14 @@ import "./quixx-colors.css"
 const TitleBar = lazy(() => import("./TitleBar"))
 const ScoreGroup = lazy(() => import("./ScoreGroup"))
 const MenuGroup = lazy(() => import("./MenuGroup"))
-const OptionsModal = lazy(() => import("./OptionsModal"))
+const Modal = lazy(() => import("./Modal"))
 
 const Quixx = () => {
     const [gameState, setGameState] = useState(Boards.quixx())
     const [scores, setScores] = useState(JSON.parse(JSON.stringify(Boards.scores)))
     const [isFullScreen, setIsFullScreen] = useState(false)
-    const [modalVisible, setModalVisible] = useState(false)
+    const [boardModalVisible, setBoardModalVisible] = useState(false)
+    const [helpModalVisible, setHelpModalVisible] = useState(false)
 
     const localStorageItem = "quixx-state"
 
@@ -44,6 +45,8 @@ const Quixx = () => {
                 newState[group].color = newBoard[group].color
                 newState[group].nums = newBoard[group].nums
                 newState.skips = newBoard.skips
+                newState.trixx = newBoard.id === 4
+                newState.id = newBoard.id
             })
             return newState
         })
@@ -82,7 +85,7 @@ const Quixx = () => {
             setIsFullScreen(true)
         }
     }
-    const scoreButton = function (btnGroup, btnNumber) {
+    const scoreButton = (btnGroup, btnNumber) => {
         setGameState((currentState) => {
             let newState = JSON.parse(JSON.stringify(currentState))
             newState.undoState = JSON.parse(JSON.stringify(currentState))
@@ -100,21 +103,10 @@ const Quixx = () => {
             // can only click 11th button (12 or 2) if the number of other buttons scored is 5 or more
             newState[btnGroup].canClick[10] = newState[btnGroup].scored.filter(Boolean).length >= 5 && !newState[btnGroup].scored[11];
 
-            // End of game logic when a lock button is pressed
-            // if (btnIndex === 11) {
-            //     const numLocks = groupList.reduce((sum, group) => {
-            //         return newState[group].scored[btnIndex] ? sum + 1 : sum
-            //     }, 0)
-            //     if (numLocks === 1 && newState[btnGroup].scored[btnIndex]) alert(`Remove the ${newState[btnGroup].color[btnIndex]} Dice`)
-            //     if (numLocks === 2) alert("Game over")
-            // }
-
             return newState
         })
     }
-    const cacheState = (stateToCache) => {
-        localStorage.setItem(localStorageItem, JSON.stringify(stateToCache))
-    }
+    const cacheState = stateToCache => localStorage.setItem(localStorageItem, JSON.stringify(stateToCache))
     const computeScore = (scoredList) => {
         // computes score for a list of boolean scored/true and notScored/false values
         let count = scoredList.filter(Boolean).length
@@ -122,7 +114,8 @@ const Quixx = () => {
         if (!scoredList[10] && scoredList[11]) count -= 1
         return count * (count + 1) / 2
     }
-    const toggleModal = () => {setModalVisible(prevState => {return !prevState})}
+    const showBoardMenu = () => setBoardModalVisible(prevState => !prevState)
+    const showHelpModal = () => setHelpModalVisible(prevState => !prevState)
 
     useEffect(() => {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem(localStorageItem))
@@ -135,7 +128,7 @@ const Quixx = () => {
             const scoreG2 = computeScore(gameState.g2.scored)
             const scoreG3 = computeScore(gameState.g3.scored)
             const scoreG4 = computeScore(gameState.g4.scored)
-            const scoreSkips = gameState.skips.filter(Boolean).length * -5
+            const scoreSkips = gameState.skips.filter(Boolean).length * (gameState.trixx ? -2 : -5)
             return {
                 blu: scoreG1,
                 gre: scoreG2,
@@ -149,22 +142,48 @@ const Quixx = () => {
     }, [gameState,])
 
     return (
-        <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
-            <div className={"app-container"}>
-                <TitleBar restart={restart}
-                          undo={undo}
-                          redo={redo}
-                          isFullScreen={isFullScreen}
-                          goFullscreen={goFullscreen}
-                          toggleModal={toggleModal}
-                          state={gameState}/>
-                <div className={"scores"}>
-                    {Boards.groups.map((group, idx) => <ScoreGroup key={idx} state={gameState[group]} group={group} click={scoreButton}/>)}
-                    <MenuGroup state={gameState} click={skip} scores={scores}/>
-                </div>
-                <OptionsModal modalVisible={modalVisible} toggleModal={toggleModal} changeBoards={changeBoards}/>
-            </div>
-        </React.Suspense>
+      <React.Suspense fallback={<LoadingScreen message={"Loading App..."}/>}>
+          <div className={"app-container"}>
+              <TitleBar restart={restart}
+                        undo={undo}
+                        redo={redo}
+                        isFullScreen={isFullScreen}
+                        goFullscreen={goFullscreen}
+                        showBoardMenu={showBoardMenu}
+                        showHelpModal={showHelpModal}
+                        state={gameState}/>
+              <div className={"scores"}>
+                  {Boards.groups.map((group, idx) => <ScoreGroup key={idx} state={gameState[group]} group={group} click={scoreButton}/>)}
+                  <MenuGroup state={gameState} click={skip} scores={scores}/>
+              </div>
+              <Modal visible={boardModalVisible} setVisible={setBoardModalVisible} title={"Change Boards"}>
+                  <>
+                      <div className={"modal-body-divider"}>Original</div>
+                      <button className={`board-btn ${gameState.id === 1 ? "active-board" : ""}`} onClick={() => {changeBoards(1); setBoardModalVisible(false)}}>Quixx</button>
+                      <div className={"modal-body-divider"}>Quixx Mixx Expansion Pack</div>
+                      <button className={`board-btn ${gameState.id === 2 ? "active-board" : ""}`} onClick={() => {changeBoards(2); setBoardModalVisible(false)}}>Quixx Mixx Numbers</button>
+                      <button className={`board-btn ${gameState.id === 3 ? "active-board" : ""}`} onClick={() => {changeBoards(3); setBoardModalVisible(false)}}>Quixx Mixx Colors</button>
+                      <div className={"modal-body-divider"}>Quixx Trixx - Party Mode</div>
+                      <button className={`board-btn ${gameState.id === 4 ? "active-board" : ""}`} onClick={() => {changeBoards(4); setBoardModalVisible(false)}}>Quixx Trixx</button>
+                      <button className={`board-btn ${gameState.id === 5 ? "active-board" : ""}`} onClick={() => {changeBoards(5); setBoardModalVisible(false)}}>Quixx - 2 Skips</button>
+                      <button className={`board-btn ${gameState.id === 6 ? "active-board" : ""}`} onClick={() => {changeBoards(6); setBoardModalVisible(false)}}>Sequential Colors</button>
+                      <div className={"modal-body-divider"}>Random Boards</div>
+                      <button className={`board-btn ${gameState.id === 7 ? "active-board" : ""}`} onClick={() => {changeBoards(7); setBoardModalVisible(false)}}>Random Numbers</button>
+                      <button className={`board-btn ${gameState.id === 8 ? "active-board" : ""}`} onClick={() => {changeBoards(8); setBoardModalVisible(false)}}>Random Colors</button>
+                      <button className={`board-btn ${gameState.id === 9 ? "active-board" : ""}`} onClick={() => {changeBoards(9); setBoardModalVisible(false)}}>Random Numbers and Colors</button>
+                  </>
+              </Modal>
+              <Modal visible={helpModalVisible} setVisible={setHelpModalVisible} title={"Help"}>
+                  <>
+                      <div className={"modal-body-divider"}>Powers</div>
+                      <div>Time Travel: Score a number you previously skipped</div>
+                      <div>Re-roll: Re-roll any number of die, but only 1 time</div>
+                      <div>Color Blind: Score with any two die on any color group</div>
+                      <div>Skip: Skip your turn</div>
+                  </>
+              </Modal>
+          </div>
+      </React.Suspense>
     )
 }
 
