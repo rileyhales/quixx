@@ -41,6 +41,7 @@ const mixColors = () => {
 
 const quixx = () => {
     return {
+        id: 1,
         undoState: null,
         redoState: null,
         g1: {
@@ -67,8 +68,7 @@ const quixx = () => {
             nums: ascendOrder,
             color: Array(buttonCount).fill('red')
         },
-        skips: Array(numSkips).fill(false),
-        id: 1
+        skips: Array(numSkips).fill(false)
     }
 }
 
