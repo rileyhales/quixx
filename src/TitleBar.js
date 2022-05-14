@@ -1,25 +1,40 @@
-import React, {lazy} from "react"
+import React, {lazy, useState} from "react"
 
 import "./TitleBar.css"
+import {useBoardConfigContext} from "./Contexts/BoardContext";
 
-const BoardSwitcher = lazy(() => import("./Components/ModalMenus/BoardSwitcher"))
+const BoardSwitcher = lazy(() => import("./Components/Modals/BoardSwitcher"))
 
 const navBtnCls = "nav-btn"
 
-const TitleBar = ({state, undo, redo, restart, showBoardMenu, showHelpModal, goFullscreen, isFullScreen}) => {
+const TitleBar = ({showBoardMenu, showHelpModal}) => {
+    const Board = useBoardConfigContext()
+
+    const [fullScreen, setFullScreen] = useState(false)
+
+    const goFullscreen = () => {
+        if (document.fullscreenElement !== null) {
+            document.exitFullscreen()
+            setFullScreen(false)
+        } else {
+            document.getElementById("root").requestFullscreen()
+            setFullScreen(true)
+        }
+    }
+
     return (
       <>
           <BoardSwitcher/>
           <div className={"header"}>
               <div className={"header-container"}>
                   <div className={"title"}>Quixx</div>
-                  <button className={navBtnCls} onClick={() => undo()} disabled={!Boolean(state.undoState)}>
+                  <button className={navBtnCls} onClick={() => Board.undo()} disabled={!Boolean(Board.state.undoState)}>
                       <img alt="Undo Button" src={process.env.PUBLIC_URL + "/arrow-counterclockwise.svg"}/>
                   </button>
-                  <button className={navBtnCls} onClick={() => redo()} disabled={!Boolean(state.redoState)}>
+                  <button className={navBtnCls} onClick={() => Board.redo()} disabled={!Boolean(Board.state.redoState)}>
                       <img alt="Redo Button" src={process.env.PUBLIC_URL + "/arrow-clockwise.svg"}/>
                   </button>
-                  <button className={navBtnCls} onClick={() => restart()}>
+                  <button className={navBtnCls} onClick={() => Board.clear()}>
                       <img alt="Restart Button" src={process.env.PUBLIC_URL + "/arrow-repeat.svg"}/>
                   </button>
                   <button className={navBtnCls} onClick={() => showBoardMenu()}>
@@ -30,7 +45,7 @@ const TitleBar = ({state, undo, redo, restart, showBoardMenu, showHelpModal, goF
                   </button>
                   <button className={navBtnCls} onClick={() => goFullscreen()}>
                       {
-                          isFullScreen ?
+                          fullScreen ?
                             <img alt="Minimize Screen Button" src={process.env.PUBLIC_URL + "/minimize.svg"}/> :
                             <img alt="Full Screen Button" src={process.env.PUBLIC_URL + "/fullscreen.svg"}/>
                       }

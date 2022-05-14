@@ -38,9 +38,6 @@ export default function MenuGroup({state, scores, click}) {
           <hr/>
           <div className={"menu-label"}>Score</div>
           {scoreBoxes}
-          <hr/>
-          <div><a href={"https://hales.app"}>&copy;RCH</a></div>
-          <div>{process.env.REACT_APP_VERSION}</div>
       </div>
     )
 };

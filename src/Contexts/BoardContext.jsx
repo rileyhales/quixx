@@ -1,4 +1,4 @@
-import React, {useContext} from "react"
+import React, {useContext, useEffect, useState} from "react"
 
 import useLocalStorage from "../Hooks/useLocalStorage";
 import Boards from "../Boards/Boards";
@@ -11,8 +11,83 @@ export const useBoardConfigContext = () => {
 
 export const BoardConfigProvider = ({children}) => {
     const [boardState, setBoardState] = useLocalStorage("quixx-state-2", Boards.quixx)
+    const [scores, setScores] = useState({
+        blu: 0,
+        gre: 0,
+        yel: 0,
+        red: 0,
+        skips: 0,
+        total: 0
+    })
 
-    const scoreButton = (btnGroup, btnNumber) => {
+    const computeScore = (scoredList) => {
+        // computes score for a list of boolean scored/true and notScored/false values
+        let count = scoredList.filter(Boolean).length
+        // if the lock button (11th position) is scored and the 12/2 (10th position) is not, the lock button doesn't count for points
+        if (!scoredList[10] && scoredList[11]) count -= 1
+        return count * (count + 1) / 2
+    }
+
+
+    const skip = (index) => {
+        setBoardState((lastState) => {
+            let newState = JSON.parse(JSON.stringify(lastState))
+            newState.undoState = JSON.parse(JSON.stringify(lastState))
+            newState.skips[index] = !newState.skips[index]
+            return newState
+        })
+    }
+    const redo = () => {
+        if (boardState.redoState === null) return
+        setBoardState(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            // cache a clone of the current state as the state to "undo"
+            newState.redoState.undoState = JSON.parse(JSON.stringify(currentState))
+            return currentState.redoState
+        })
+    }
+    const undo = () => {
+        if (boardState.undoState === null) return
+        setBoardState(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState.undoState))
+            newState.redoState = JSON.parse(JSON.stringify(currentState))
+            return newState
+        })
+    }
+    const clear = () => {
+        if (!window.confirm("Are you sure you want to reset your board?")) return
+        setBoardState(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            Boards.groups.forEach(group => {
+                newState.undoState = null
+                newState.redoState = null
+                newState[group].scored = Array(...Boards.scored)
+                newState[group].scored = Array(...Boards.scored)
+                newState[group].canClick = Array(...Boards.clickable)
+                newState.skips = newState.skips.map(() => false)
+            })
+            return newState
+        })
+    }
+
+    const change = ID => {
+        const newBoard = Boards.lookup[ID]()
+        setBoardState(currentState => {
+            let newState = JSON.parse(JSON.stringify(currentState))
+            Boards.groups.forEach(group => {
+                newState.undoState = null
+                newState.redoState = null
+                newState[group].color = newBoard[group].color
+                newState[group].nums = newBoard[group].nums
+                newState.skips = newBoard.skips
+                newState.trixx = newBoard.id === 4
+                newState.id = newBoard.id
+            })
+            return newState
+        })
+    }
+
+    const score = (btnGroup, btnNumber) => {
         setBoardState(currentState => {
             let newState = JSON.parse(JSON.stringify(currentState))
             newState.undoState = JSON.parse(JSON.stringify(currentState))
@@ -33,11 +108,11 @@ export const BoardConfigProvider = ({children}) => {
 
     useEffect(() => {
         setScores(() => {
-            const scoreG1 = computeScore(Configs.gameState.g1.scored)
-            const scoreG2 = computeScore(Configs.gameState.g2.scored)
-            const scoreG3 = computeScore(Configs.gameState.g3.scored)
-            const scoreG4 = computeScore(Configs.gameState.g4.scored)
-            const scoreSkips = Configs.gameState.skips.filter(Boolean).length * (Configs.gameState.trixx ? -2 : -5)
+            const scoreG1 = computeScore(boardState.g1.scored)
+            const scoreG2 = computeScore(boardState.g2.scored)
+            const scoreG3 = computeScore(boardState.g3.scored)
+            const scoreG4 = computeScore(boardState.g4.scored)
+            const scoreSkips = boardState.skips.filter(Boolean).length * (boardState.trixx ? -2 : -5)
             return {
                 blu: scoreG1,
                 gre: scoreG2,
@@ -47,15 +122,21 @@ export const BoardConfigProvider = ({children}) => {
                 total: scoreG1 + scoreG2 + scoreG3 + scoreG4 + scoreSkips
             }
         })
-    }, [Configs.gameState,])
+    }, [boardState,])
 
-    const values = {
-        boardState,
-        setBoardState,
-        scoreButton
+    const exports = {
+        state: boardState,
+        setState: setBoardState,
+        scores: scores,
+        undo,
+        redo,
+        skip,
+        clear,
+        change,
+        score
     }
     return (
-      <BoardConfig.Provider value={values}>
+      <BoardConfig.Provider value={exports}>
           {children}
       </BoardConfig.Provider>
     )
