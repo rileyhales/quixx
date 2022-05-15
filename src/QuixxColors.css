@@ -1,0 +1,35 @@
+:root {
+    --clr-orange: #FFA500FF;
+    --clr-red: red;
+    --clr-red-fade: rgba(255, 0, 0, .8);
+    --clr-yel: #cdb42f;
+    --clr-yel-fade: rgba(205, 180, 47, .8);
+    --clr-gre: green;
+    --clr-gre-fade: rgba(0, 128, 0, .7);
+    --clr-blue: #2525ff;
+    --clr-blue-fade: rgba(37, 37, 255, .6);
+    --clr-purp: #c36aff;
+    --clr-white: white;
+    --clr-grey: lightgrey;
+    --clr-active: limegreen
+}
+.bg-orange {background-color: orange}
+
+.bg-red {background-color: red}
+.bg-red-fade {background-color: rgba(255, 0, 0, .8)}
+
+.bg-yel {background-color: #cdb42f}
+.bg-yel-fade {background-color: rgba(205, 180, 47, .8)}
+
+.bg-gre {background-color: green}
+.bg-gre-fade {background-color: rgba(0, 128, 0, .7)}
+
+.bg-blu {background-color: #2525ff}
+.bg-blu-fade {background-color: rgba(37, 37, 255, .6)}
+
+.bg-skips-fade {background-color: #c36aff}
+.bg-total-fade {background-color: white}
+
+.bg-grey {background-color: lightgrey}
+
+.active-board {background: greenyellow}

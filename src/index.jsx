@@ -2,7 +2,7 @@ import React from "react"
 import {createRoot} from 'react-dom/client'
 
 import {BoardConfigProvider} from "./Contexts/BoardContext";
-import "./quixx-colors.css"
+import "./QuixxColors.css"
 
 import Quixx from "./Quixx"
 

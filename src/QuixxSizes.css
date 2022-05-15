@@ -1,0 +1,28 @@
+.btn-sizes {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: x-large;
+    border-radius: 8px;
+}
+
+@media (max-height: 665px) {
+    .btn-sizes {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+        min-height: 35px;
+        font-size: 30px;
+    }
+}
+
+@media (max-height: 600px) {
+    .btn-sizes {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+        font-size: 25px;
+    }
+}

@@ -96,6 +96,7 @@ const trixx = () => {
     const state = quixx()
     state.trixx = true
     state.id = 4
+    state.skips = Array(5).fill(false)
     return state
 }
 

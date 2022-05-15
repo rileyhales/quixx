@@ -1,4 +1,4 @@
-body, #root, .app-container {
+#root, .app-container {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -8,44 +8,19 @@ body, #root, .app-container {
     left: 0;
     right: 0;
 }
+
 #root {
     background-color: lightcyan;
 }
+
 .app-container {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 625px;
 }
-.btn-sizes {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    font-size: 35px;
-    margin: 4px;
-    border-radius: 3px;
-}
 .board-btn {
     width: 90%;
     padding: .5em 0;
     margin: .5em 0;
-}
-@media (max-height: 665px) {
-    .btn-sizes {
-        width: 35px;
-        height: 35px;
-        min-width: 35px;
-        min-height: 35px;
-        font-size: 30px;
-    }
-}
-@media (max-height: 600px) {
-    .btn-sizes {
-        width: 30px;
-        height: 30px;
-        min-width: 30px;
-        min-height: 30px;
-        font-size: 25px;
-    }
 }
