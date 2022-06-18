@@ -1,19 +1,18 @@
-.header {
+.board-menu-wrap {
     width: 100%;
-    min-height: 6%;
-    max-height: 9%;
+    height: 6%;
     flex: 1 1 auto;
-    background-color: orange;
+    background-color: var(--clr-orange);
     display: flex;
     flex-direction: row;
     justify-content: center;
     border-bottom: 2px solid black;
 }
-.header > * {
+.board-menu-wrap > * {
     display: flex;
     align-items: center;
 }
-.header-container {
+.board-menu {
     height: 100%;
     width: 90%;
     justify-content: space-evenly;
@@ -21,10 +20,12 @@
 .title {
     font-size: 1.75em;
     font-weight: bold;
+    padding-right: 15px;
 }
 .nav-btn {
     border: none;
     background: none;
+    padding: 0;
 }
 .nav-btn:disabled {
     opacity: .2;

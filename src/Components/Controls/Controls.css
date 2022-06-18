@@ -1,6 +1,5 @@
 .skip-label {
     position: relative;
-    margin: 3px 0;
     display: block;
     border: 1px solid black;
 }
@@ -19,27 +18,17 @@
     justify-content: center;
     text-align: center;
     font-family: sans-serif;
-    border-radius: 2px;
+    border-radius: 8px;
+    background-color: white;
+    transition: all 0.4s ease-out;
 }
 .skip-style-span > img {
     width: 75%;
 }
-.skip-label .skip-style-span {
-    background-color: white;
-    transition: all 0.4s ease-out;
-}
 .skip-label input:checked ~ .skip-style-span {
-    transition: all 0.4s ease-out;
-    background-color: #c36aff;
+    color: #c36aff
 }
-.score-total {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: large;
-    font-weight: bold;
-}
-.menu-group > hr {
+hr {
     border: 1px black solid;
     background-color: black;
     width: 90%;

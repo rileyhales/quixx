@@ -41,6 +41,7 @@ const mixColors = () => {
 
 const quixx = () => {
     return {
+        id: 1,
         undoState: null,
         redoState: null,
         g1: {
@@ -67,8 +68,7 @@ const quixx = () => {
             nums: ascendOrder,
             color: Array(buttonCount).fill('red')
         },
-        skips: Array(numSkips).fill(false),
-        id: 1
+        skips: Array(numSkips).fill(false)
     }
 }
 
@@ -96,6 +96,7 @@ const trixx = () => {
     const state = quixx()
     state.trixx = true
     state.id = 4
+    state.skips = Array(5).fill(false)
     return state
 }
 
@@ -107,7 +108,7 @@ const lessSkips = () => {
 }
 
 const sequential = () => {
-    const colors = ['red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', ]
+    const colors = ['red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre', 'blu', 'red', 'yel', 'gre',]
     const state = quixx()
     state.g1.color = colors.concat(["blu"])
     state.g2.color = colors.concat(["gre"])
@@ -160,22 +161,12 @@ const lookup = {
     9: randomNumCol
 }
 
-const scores = {
-    blu: 0,
-    gre: 0,
-    yel: 0,
-    red: 0,
-    skips: 0,
-    total: 0
-}
-
 const groups = ["g1", "g2", "g3", "g4"]
 
 const Boards = {
     quixx,
     lookup,
     groups,
-    scores,
     clickable,
     scored
 }

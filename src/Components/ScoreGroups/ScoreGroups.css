@@ -1,28 +1,30 @@
-.scores {
+.groups {
     width: 100%;
-    height: 90%;
+    height: 93%;
     flex: 1 1 auto;
     display: flex;
     flex-direction: row;
 }
-.score-group {
+.groups > div {
     flex: 1 1 auto;
     width: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    background: var(--clr-grey);
 }
 .score-btn {
     display: flex;
     font-weight: bold;
-    font-size: large;
+    font-size: larger;
     align-items: center;
     justify-content: center;
     transition: all .4s ease-out;
     background-color: #eeeeee;
-    border-radius: 3px;
+    border-radius: 8px;
     border: none;
+    opacity: .85
 }
 .score-btn:disabled {
     transition: all .4s ease-out;
@@ -30,6 +32,7 @@
 .scored {
     background-color: #75f100;
     transition: all .4s ease-out;
+    opacity: 1;
 }
 .locked.scored {
     background-color: orange;
@@ -41,4 +44,11 @@
     align-items: center;
     width: 100%;
     height: 100%;
+}
+.score-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+    font-weight: bold;
 }
