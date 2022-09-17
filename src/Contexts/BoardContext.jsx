@@ -96,6 +96,8 @@ export const BoardConfigProvider = ({children}) => {
             const btnIndex = newState[btnGroup].nums.indexOf(btnNumber)
             // toggle the scored status of the button
             newState[btnGroup].scored[btnIndex] = !(newState[btnGroup].scored[btnIndex])
+            // if the 10th button is scored, also automatically lock the column
+            if (btnIndex === 10 && newState[btnGroup].scored[btnIndex]) newState[btnGroup].scored[11] = true
             // figure out what buttons should be clickable
             const indexOfHighestScoredBox = newState[btnGroup].scored.lastIndexOf(true)
             // buttons lower than the one pressed are disabled
