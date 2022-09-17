@@ -7,12 +7,15 @@
 }
 .groups > div {
     flex: 1 1 auto;
-    width: 20%;
+    min-width: 18%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     background: var(--clr-grey);
+}
+.groups > div:last-child {
+    flex: 0 1 auto;
 }
 .score-btn {
     display: flex;
@@ -24,10 +27,11 @@
     background-color: #eeeeee;
     border-radius: 8px;
     border: none;
-    opacity: .85
+    color: black;
 }
 .score-btn:disabled {
     transition: all .4s ease-out;
+    color: #939292
 }
 .scored {
     background-color: #75f100;

@@ -9,20 +9,20 @@
 
 @media (max-height: 665px) {
     .btn-sizes {
-        width: 35px;
-        height: 35px;
-        min-width: 35px;
-        min-height: 35px;
-        font-size: 30px;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 32px;
     }
 }
 
 @media (max-height: 600px) {
     .btn-sizes {
-        width: 30px;
-        height: 30px;
-        min-width: 30px;
-        min-height: 30px;
-        font-size: 25px;
+        width: 31px;
+        height: 31px;
+        min-width: 31px;
+        min-height: 31px;
+        font-size: 27px;
     }
 }
