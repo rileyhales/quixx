@@ -1,8 +1,8 @@
 {
-  "name": "quixx-react",
+  "name": "qwixx-react",
   "version": "2.1.0",
   "private": true,
-  "homepage": "https://quixx.hales.app",
+  "homepage": "https://qwixx.games.hales.app",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

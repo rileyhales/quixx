@@ -1,11 +1,11 @@
-# Quixx Score Card
-A React web app to help you play the dice game Quixx.
+# Qwixx Score Card
+A React web app to help you play the dice game Qwixx.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7cd9a5e3-af1e-4140-a4e3-a2b48f6e180e/deploy-status)](https://app.netlify.com/sites/rileyhalescom-quixx/deploys)
 
-Play this app here: https://quixx.hales.app
+Play this app here: https://qwixx.games.hales.app
 
-Full rules for Quixx: https://www.ultraboardgames.com/qwixx/game-rules.php
+Full rules for Qwixx: https://www.ultraboardgames.com/qwixx/game-rules.php
 
 Features:
 - Full score card interface

@@ -2,16 +2,16 @@ import React from "react"
 import {createRoot} from 'react-dom/client'
 
 import {BoardConfigProvider} from "./Contexts/BoardContext";
-import "./QuixxColors.css"
+import "./Colors.css"
 
-import Quixx from "./Quixx"
+import Qwixx from "./Qwixx"
 
 
 createRoot(document.getElementById('root'))
   .render(
     <React.StrictMode>
         <BoardConfigProvider>
-            <Quixx/>
+            <Qwixx/>
         </BoardConfigProvider>
     </React.StrictMode>
   )
